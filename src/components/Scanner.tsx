@@ -97,6 +97,138 @@ function rotate90Cw(arr: CubeColor[]): CubeColor[] {
   ];
 }
 
+interface DemoCubeProps {
+  faceKey: FaceName;
+}
+
+function WebcamLaptopGuide({ faceKey }: DemoCubeProps) {
+  let faceColor = 'green';
+  let topColor = 'white';
+
+  switch (faceKey) {
+    case 'F': faceColor = 'green'; topColor = 'white'; break;
+    case 'R': faceColor = 'red'; topColor = 'white'; break;
+    case 'B': faceColor = 'blue'; topColor = 'white'; break;
+    case 'L': faceColor = 'orange'; topColor = 'white'; break;
+    case 'U': faceColor = 'white'; topColor = 'red'; break;
+    case 'D': faceColor = 'yellow'; topColor = 'orange'; break;
+  }
+
+  const getBgClass = (c: string) => {
+    switch (c) {
+      case 'white': return 'bg-cube-white';
+      case 'yellow': return 'bg-cube-yellow';
+      case 'green': return 'bg-cube-green';
+      case 'blue': return 'bg-cube-blue';
+      case 'red': return 'bg-cube-red';
+      case 'orange': return 'bg-cube-orange';
+      default: return 'bg-charcoal';
+    }
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center p-3.5 bg-white/40 border border-borders/20 rounded-2xl shadow-none w-full relative overflow-hidden select-none">
+      <span className="text-[10px] font-bold text-muted-text uppercase tracking-widest mb-2.5">Camera Scan Orientation Guide</span>
+      
+      {/* Visual illustration box */}
+      <div className="w-full h-36 flex items-center justify-between px-6 relative">
+        {/* Camera Lens SVG Profile on the left (pointing right) */}
+        <div className="w-20 h-20 flex items-center justify-center shrink-0">
+          <svg viewBox="0 0 100 80" className="w-full h-full">
+            {/* Viewfinder eyepiece on the back (left side) */}
+            <rect x="18" y="34" width="4" height="12" rx="1" fill="none" stroke="#1E293B" strokeWidth="2" />
+            
+            {/* Camera Body */}
+            <rect x="22" y="26" width="38" height="28" rx="4" fill="none" stroke="#1E293B" strokeWidth="2.5" />
+            
+            {/* Viewfinder hump on top */}
+            <path d="M34 26 L38 21 L46 21 L50 26" fill="none" stroke="#1E293B" strokeWidth="2.5" strokeLinejoin="round" />
+            
+            {/* Lens Base Barrel sticking right */}
+            <rect x="60" y="30" width="8" height="20" rx="1.5" fill="none" stroke="#1E293B" strokeWidth="2.5" />
+            
+            {/* Lens Front Barrel extending further right */}
+            <rect x="68" y="34" width="6" height="12" rx="1" fill="none" stroke="#1E293B" strokeWidth="2.5" />
+            
+            {/* Front Glass lens tip curved profile */}
+            <path d="M74 34 C75.5 36 75.5 44 74 46" stroke="#1E293B" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+            
+            {/* Blue lens glass reflection accent */}
+            <path d="M72 36 C73 38 73 42 72 44" stroke="#38BDF8" strokeWidth="1.5" strokeLinecap="round" opacity="0.9" fill="none" />
+            
+            {/* Active LED */}
+            <circle cx="30" cy="33" r="1.5" fill="#22C55E" className="animate-pulse" />
+          </svg>
+        </div>
+
+        {/* Laser line between camera lens (left) and cube (right) */}
+        <div className="absolute left-[83px] right-[64px] top-1/2 -translate-y-1/2 h-[1.5px] border-t-2 border-dashed border-accent-orange/60 animate-pulse pointer-events-none" />
+        
+        {/* Cube on the right (facing the laptop on the left) */}
+        <div 
+          className="w-20 h-20 flex items-center justify-center shrink-0" 
+          style={{ perspective: '400px' }}
+        >
+          <div 
+            className="w-12 h-12 relative"
+            style={{ 
+              transformStyle: 'preserve-3d',
+              transform: 'rotateX(-20deg) rotateY(35deg)' 
+            }}
+          >
+            {/* Top face of cube */}
+            <div 
+              className="absolute inset-0 bg-[#121212] border border-charcoal/30 p-[0.5px] rounded"
+              style={{ transform: 'rotateX(90deg) translateZ(24px)', backfaceVisibility: 'visible' }}
+            >
+              <div className="grid grid-cols-3 gap-[0.5px] w-full h-full">
+                {[...Array(9)].map((_, i) => (
+                  <div key={i} className={`rounded-[1px] ${getBgClass(topColor)}`} />
+                ))}
+              </div>
+            </div>
+
+            {/* Left face of cube (facing left, towards the laptop webcam) */}
+            <div 
+              className="absolute inset-0 bg-[#121212] border border-charcoal/30 p-[0.5px] rounded"
+              style={{ transform: 'rotateY(-90deg) translateZ(24px)', backfaceVisibility: 'visible' }}
+            >
+              <div className="grid grid-cols-3 gap-[0.5px] w-full h-full">
+                {[...Array(9)].map((_, i) => (
+                  <div key={i} className={`rounded-[1px] ${getBgClass(faceColor)}`} />
+                ))}
+              </div>
+            </div>
+
+            {/* Front-Right face of cube (facing us / viewer) */}
+            <div 
+              className="absolute inset-0 bg-[#121212] border border-charcoal/30 p-[0.5px] rounded"
+              style={{ transform: 'rotateY(0deg) translateZ(24px)', backfaceVisibility: 'visible' }}
+            >
+              <div className="grid grid-cols-3 gap-[0.5px] w-full h-full">
+                {[...Array(9)].map((_, i) => (
+                  <div key={i} className="rounded-[1px] bg-charcoal/55" />
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="text-[10px] font-bold text-charcoal flex gap-4 justify-center items-center mt-1.5 w-full">
+        <span className="flex items-center gap-1.5">
+          <span className={`inline-block w-2.5 h-2.5 rounded border border-black/10 ${getBgClass(faceColor)}`} />
+          Show: <strong className="text-accent-orange uppercase font-bold">{faceColor}</strong>
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className={`inline-block w-2.5 h-2.5 rounded border border-black/10 ${getBgClass(topColor)}`} />
+          Top: <strong className="text-charcoal uppercase font-bold">{topColor}</strong>
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function Scanner({ onScanComplete, onCancel }: ScannerProps) {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [scannedFaces, setScannedFaces] = useState<Record<FaceName, CubeColor[] | null>>({
@@ -388,272 +520,201 @@ export default function Scanner({ onScanComplete, onCancel }: ScannerProps) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 p-6 glass-card rounded-3xl w-full max-w-4xl mx-auto">
-      {/* Step Indicator Header */}
-      <div className="w-full flex items-center justify-between border-b border-borders/50 pb-4 overflow-x-auto gap-3">
-        {FACES.map((face, idx) => {
-          const isCurrent = idx === currentStep;
-          const isDone = scannedFaces[face.key] !== null;
+    <div className="w-full max-w-7xl mx-auto" style={{ height: 'calc(100vh - 172px)', minHeight: 480 }}>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-0 w-full h-full items-stretch">
 
-          return (
-            <button
-              key={face.key}
-              onClick={() => setCurrentStep(idx)}
-              className={`
-                flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-semibold transition-all duration-200 cursor-pointer
-                ${isCurrent ? 'bg-charcoal text-white border-charcoal scale-105 shadow-sm' : ''}
-                ${!isCurrent && isDone ? 'bg-success/5 text-success border-success/20 hover:bg-success/10' : ''}
-                ${!isCurrent && !isDone ? 'bg-transparent text-muted-text border-borders hover:bg-charcoal/5' : ''}
-              `}
-            >
-              <div className={`w-3.5 h-3.5 rounded-md border ${face.centerColor.split(' ')[0]} ${face.centerColor.split(' ')[1]}`} />
-              <span className="font-geist">{face.key}</span>
-              {isDone && <Check className="w-3 h-3" />}
-            </button>
-          );
-        })}
-      </div>
+        {/* ── Col 1: Camera — centered ── */}
+        <div className="lg:col-span-4 pr-0 lg:pr-5 flex flex-col items-center justify-center py-2 h-full">
 
-      <div className="grid md:grid-cols-12 gap-8 w-full items-start">
-        {/* Left Side: Camera & Live Preview */}
-        <div className="md:col-span-7 flex flex-col items-center gap-4 w-full">
-          <div className="w-full aspect-square max-w-[360px] relative rounded-3xl overflow-hidden bg-charcoal/95 border border-charcoal shadow-inner flex items-center justify-center">
-            {useCamera ? (
-              <>
-                <video
-                  ref={videoRef}
-                  autoPlay
-                  playsInline
-                  muted
-                  className="w-full h-full object-cover pointer-events-none"
-                />
-                
-                {/* 3x3 Overlay Grid */}
-                <div className="absolute inset-0 flex items-center justify-center p-6">
-                  <div className="w-4/5 h-4/5 border border-white/30 rounded-2xl grid grid-cols-3 grid-rows-3 gap-2 p-2 bg-black/10 backdrop-blur-[1px] relative">
-                    {realtimeColors.map((color, idx) => {
-                      const isCenter = idx === 4;
-                      const displayColor = manualOverrides[idx] || color;
-                      const colorStyles = COLOR_MAP[displayColor];
-                      return (
-                        <div
-                          key={`realtime-${idx}`}
-                          onClick={() => handleCellTap(idx)}
-                          className={`
-                            w-full h-full rounded-lg border border-dashed border-white/40 flex items-center justify-center bg-black/5 backdrop-blur-[0.5px] transition-all duration-200
-                            ${isCenter ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-white/10 active:scale-95'}
-                          `}
-                          title={isCenter ? 'Locked center sticker' : 'Click to cycle override color'}
-                        >
+          <div className="flex flex-col items-center justify-center gap-3 w-full max-w-[300px]">
+            {/* Camera box */}
+            <div className="w-full aspect-square relative rounded-2xl overflow-hidden bg-charcoal/95 border-2 border-charcoal shadow-[4px_4px_0px_0px_#1E1E1C] flex items-center justify-center shrink-0">
+              {useCamera ? (
+                <>
+                  <video ref={videoRef} autoPlay playsInline muted className="w-full h-full object-cover pointer-events-none" />
+                  <div className="absolute inset-0 flex items-center justify-center p-5">
+                    <div className="w-full h-full border border-white/30 rounded-xl grid grid-cols-3 grid-rows-3 gap-1.5 p-1.5 bg-black/10 backdrop-blur-[1px]">
+                      {realtimeColors.map((color, idx) => {
+                        const isCenter = idx === 4;
+                        const displayColor = manualOverrides[idx] || color;
+                        const colorStyles = COLOR_MAP[displayColor];
+                        return (
                           <div
-                            className={`w-9 h-9 rounded-md border shadow-sm transition-all duration-200 ${colorStyles.split(' ')[0]} ${colorStyles.split(' ')[1]}`}
-                          />
-                        </div>
-                      );
-                    })}
+                            key={`realtime-${idx}`}
+                            onClick={() => handleCellTap(idx)}
+                            className={`w-full h-full rounded-md border border-dashed border-white/40 flex items-center justify-center bg-black/5 transition-all duration-200 ${isCenter ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-white/10 active:scale-95'}`}
+                            title={isCenter ? 'Locked center' : 'Tap to override color'}
+                          >
+                            <div className={`w-7 h-7 rounded border shadow-sm transition-all duration-200 ${colorStyles.split(' ')[0]} ${colorStyles.split(' ')[1]}`} />
+                          </div>
+                        );
+                      })}
+                    </div>
                   </div>
+                </>
+              ) : (
+                <div className="flex flex-col items-center justify-center p-6 text-center text-white/60">
+                  <CameraOff className="w-10 h-10 mb-3 text-white/35 animate-pulse" />
+                  <span className="text-xs font-semibold font-geist mb-3">Camera inactive</span>
+                  <label className="px-4 py-2 bg-white text-charcoal font-semibold text-xs rounded-lg cursor-pointer neo-btn-sm inline-flex items-center gap-1.5">
+                    <Upload className="w-3.5 h-3.5" />
+                    Upload Photo
+                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                  </label>
                 </div>
-              </>
-            ) : (
-              <div className="flex flex-col items-center justify-center p-6 text-center text-white/60">
-                <CameraOff className="w-12 h-12 mb-3 text-white/35 animate-pulse" />
-                <span className="text-xs font-semibold font-geist mb-4">Camera is inactive</span>
-                
-                <label className="px-4 py-2 bg-white text-charcoal font-semibold text-xs rounded-xl cursor-pointer neo-btn-sm inline-flex items-center gap-1.5">
-                  <Upload className="w-3.5 h-3.5" />
-                  Upload Photo
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
-                </label>
+              )}
+              <canvas ref={canvasRef} className="hidden" />
+            </div>
+
+            {/* Controls */}
+            <div className="flex items-center gap-2 w-full">
+              <button onClick={() => setUseCamera(!useCamera)} className="p-2 rounded-lg bg-white cursor-pointer text-charcoal neo-btn-sm" title={useCamera ? 'Turn Camera Off' : 'Turn Camera On'}>
+                <Camera className="w-3.5 h-3.5" />
+              </button>
+              {useCamera && devices.length > 1 && (
+                <button onClick={switchCamera} className="p-2 rounded-lg bg-white cursor-pointer text-charcoal neo-btn-sm" title="Switch Camera">
+                  <RefreshCw className="w-3.5 h-3.5" />
+                </button>
+              )}
+              {useCamera && (
+                <button onClick={handleCapture} className="flex-1 py-2 bg-accent-orange text-white text-xs font-bold rounded-lg cursor-pointer neo-btn flex items-center justify-center gap-1.5">
+                  <Camera className="w-3.5 h-3.5" />
+                  Capture Face
+                </button>
+              )}
+            </div>
+
+            {cameraError && (
+              <div className="w-full p-2.5 bg-cube-red/5 border border-cube-red/20 rounded-xl flex items-start gap-2 text-cube-red">
+                <AlertCircle className="w-3.5 h-3.5 shrink-0 mt-0.5" />
+                <span className="text-[10px] leading-relaxed">{cameraError}</span>
               </div>
-            )}
-
-            {/* Hidden capture canvas */}
-            <canvas ref={canvasRef} className="hidden" />
-          </div>
-
-          {/* Camera controls */}
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => setUseCamera(!useCamera)}
-              className="p-2.5 rounded-xl bg-white cursor-pointer text-charcoal neo-btn-sm"
-              title={useCamera ? 'Turn Camera Off' : 'Turn Camera On'}
-            >
-              <Camera className="w-4 h-4" />
-            </button>
-
-            {useCamera && devices.length > 1 && (
-              <button
-                onClick={switchCamera}
-                className="p-2.5 rounded-xl bg-white cursor-pointer text-charcoal neo-btn-sm"
-                title="Switch Camera"
-              >
-                <RefreshCw className="w-4 h-4" />
-              </button>
-            )}
-
-            {useCamera && (
-              <button
-                onClick={handleCapture}
-                className="px-5 py-2.5 bg-accent-orange text-white text-xs font-bold rounded-xl cursor-pointer neo-btn-sm"
-              >
-                Capture Face
-              </button>
             )}
           </div>
         </div>
 
-        {/* Right Side: Step Instruction & Captured State Review */}
-        <div className="md:col-span-5 flex flex-col gap-6 w-full justify-between h-full min-h-[360px]">
-          <div className="flex flex-col gap-4">
+        {/* ── Col 2: Instructions — centered ── */}
+        <div className="lg:col-span-4 border-l border-r border-borders/20 px-5 flex flex-col items-center justify-center py-2 h-full">
+          <div className="w-full max-w-[340px] flex flex-col gap-6">
             <div className="flex flex-col gap-1.5">
-              <span className="text-[10px] uppercase font-bold tracking-widest text-accent-orange font-geist">
-                Step {currentStep + 1} of 6
-              </span>
-              <h2 className="text-xl font-bold font-geist">Scan {activeFace.name} Face</h2>
-              <p className="text-xs text-muted-text">{activeFace.description}</p>
+              <span className="text-xs uppercase font-extrabold tracking-wider text-accent-orange font-geist">Step {currentStep + 1} of 6</span>
+              <h2 className="text-2xl lg:text-3xl font-extrabold font-geist tracking-tight leading-tight">Scan {activeFace.name} Face</h2>
+              <p className="text-sm text-muted-text leading-relaxed">{activeFace.description}</p>
             </div>
 
-            {/* Rotation Guidance card */}
-            <div className="p-4 bg-accent-orange/5 border border-accent-orange/15 rounded-2xl flex items-center gap-4 shadow-sm relative overflow-hidden">
-              <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-accent-orange text-white shadow-md shadow-accent-orange/15 shrink-0">
-                {ROTATION_INSTRUCTIONS[currentStep].direction === 'none' && (
-                  <GraduationCap className="w-5 h-5" />
-                )}
+            <div className="p-4 bg-accent-orange/5 border border-accent-orange/15 rounded-xl flex items-start gap-3 shadow-sm">
+              <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-accent-orange text-white shadow-sm shrink-0 mt-0.5">
+                {ROTATION_INSTRUCTIONS[currentStep].direction === 'none' && <GraduationCap className="w-5 h-5" />}
                 {ROTATION_INSTRUCTIONS[currentStep].direction === 'right' && (
-                  <motion.div
-                    animate={{ x: [-3, 3, -3] }}
-                    transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
-                  >
+                  <motion.div animate={{ x: [-2, 2, -2] }} transition={{ repeat: Infinity, duration: 1.2, ease: 'easeInOut' }}>
                     <ArrowRight className="w-5 h-5" />
                   </motion.div>
                 )}
                 {ROTATION_INSTRUCTIONS[currentStep].direction === 'left' && (
-                  <motion.div
-                    animate={{ x: [3, -3, 3] }}
-                    transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
-                  >
+                  <motion.div animate={{ x: [2, -2, 2] }} transition={{ repeat: Infinity, duration: 1.2, ease: 'easeInOut' }}>
                     <ArrowLeft className="w-5 h-5" />
                   </motion.div>
                 )}
                 {ROTATION_INSTRUCTIONS[currentStep].direction === 'down' && (
-                  <motion.div
-                    animate={{ y: [-3, 3, -3] }}
-                    transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
-                  >
+                  <motion.div animate={{ y: [-2, 2, -2] }} transition={{ repeat: Infinity, duration: 1.2, ease: 'easeInOut' }}>
                     <ArrowDown className="w-5 h-5" />
                   </motion.div>
                 )}
                 {ROTATION_INSTRUCTIONS[currentStep].direction === 'up' && (
-                  <motion.div
-                    animate={{ y: [3, -3, 3] }}
-                    transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
-                  >
+                  <motion.div animate={{ y: [2, -2, 2] }} transition={{ repeat: Infinity, duration: 1.2, ease: 'easeInOut' }}>
                     <ArrowUp className="w-5 h-5" />
                   </motion.div>
                 )}
               </div>
               <div className="flex flex-col gap-0.5">
-                <span className="text-[10px] uppercase font-bold text-accent-orange tracking-wider font-geist">
+                <span className="text-[10px] uppercase font-extrabold text-accent-orange tracking-wider font-geist">
                   {currentStep === 0 ? 'Starting Orientation' : 'Next Physical Rotation'}
                 </span>
-                <p className="text-xs font-semibold text-charcoal leading-normal">
-                  {ROTATION_INSTRUCTIONS[currentStep].text}
-                </p>
+                <p className="text-sm font-semibold text-charcoal leading-snug">{ROTATION_INSTRUCTIONS[currentStep].text}</p>
               </div>
             </div>
 
-            {/* Guide illustration card */}
-            <div className="p-4 bg-charcoal/5 rounded-2xl border border-borders/60 flex items-center gap-4">
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center border font-bold text-lg shadow-sm ${activeFace.centerColor}`}>
-                {activeFace.key}
-              </div>
-              <div className="flex flex-col gap-0.5">
-                <span className="text-xs font-semibold font-geist text-charcoal">Center sticker</span>
-                <span className="text-[10px] text-muted-text">This sticker MUST match the target face color.</span>
-              </div>
-            </div>
+            <WebcamLaptopGuide faceKey={activeFace.key} />
+          </div>
+        </div>
 
-            {/* Scanned face previews list */}
-            <div className="flex flex-col gap-2 mt-2">
-              <span className="text-[10px] uppercase tracking-wider font-bold text-muted-text font-geist">Scan History</span>
-              <div className="grid grid-cols-3 gap-2">
-                {FACES.map((face) => {
-                  const stateColors = scannedFaces[face.key];
-                  return (
-                    <div
-                      key={`preview-${face.key}`}
-                      className="p-2 border border-borders/50 rounded-xl bg-white flex flex-col items-center gap-1.5"
-                    >
-                      <span className="text-[9px] font-bold text-muted-text">{face.name.split(' ')[0]}</span>
-                      {stateColors ? (
-                        <div className="grid grid-cols-3 gap-0.5 w-8 h-8">
-                          {stateColors.map((c, i) => (
-                            <div
-                              key={i}
-                              className={`w-full h-full rounded-[1px] border-[0.5px] border-black/10 ${COLOR_MAP[c].split(' ')[0]}`}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <div className="w-8 h-8 rounded-lg border border-dashed border-borders/80 flex items-center justify-center bg-charcoal/5 text-[9px] text-muted-text/50 font-bold">
-                          —
-                        </div>
-                      )}
-                      {stateColors && (
-                        <button
-                          onClick={() => handleRetake(face.key)}
-                          className="text-[8px] font-semibold text-cube-red hover:underline cursor-pointer"
-                        >
-                          Retake
-                        </button>
-                      )}
+        {/* ── Col 3: Scan Progress — compact, buttons pinned ── */}
+        <div className="lg:col-span-4 pl-0 lg:pl-5 flex flex-col gap-3 py-2 h-full">
+          <span className="text-[9px] uppercase tracking-wider font-bold text-muted-text font-geist shrink-0">Scan Progress</span>
+
+          <div className="grid grid-cols-2 grid-rows-3 gap-2 flex-1 min-h-0">
+            {FACES.map((face, idx) => {
+              const isCurrent = idx === currentStep;
+              const stateColors = scannedFaces[face.key];
+              const isDone = stateColors !== null;
+              return (
+                <div
+                  key={`preview-${face.key}`}
+                  onClick={() => setCurrentStep(idx)}
+                  className={`p-2.5 border rounded-xl flex flex-col justify-between transition-all duration-200 cursor-pointer ${
+                    isCurrent ? 'bg-white border-accent-orange/50 shadow-sm ring-1 ring-accent-orange/20'
+                    : isDone ? 'bg-white/70 border-success/30'
+                    : 'bg-white/40 border-borders/35 hover:bg-white/80'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-1 w-full shrink-0">
+                    <div className="flex items-center gap-1">
+                      <div className={`w-3.5 h-3.5 rounded border flex items-center justify-center shrink-0 border-black/10 ${face.centerColor.split(' ')[0]}`}>
+                        {isDone && <Check className={`w-2.5 h-2.5 stroke-[3px] ${face.key === 'U' ? 'text-charcoal' : 'text-white'}`} />}
+                      </div>
+                      <span className="text-[9px] font-bold text-charcoal font-geist truncate">{face.name}</span>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
+                    {isDone && (
+                      <button onClick={(e) => { e.stopPropagation(); handleRetake(face.key); }} className="text-[8px] font-bold text-cube-red hover:underline cursor-pointer shrink-0">
+                        Redo
+                      </button>
+                    )}
+                  </div>
+                  {stateColors ? (
+                    <div className="flex flex-col items-center justify-center gap-1.5 flex-1 py-1">
+                      <div className="grid grid-cols-3 gap-[1px] w-16 h-16 border border-black/5 p-[2px] rounded-lg bg-charcoal/5">
+                        {stateColors.map((c, i) => (
+                          <div key={i} className={`w-full h-full rounded-[1.5px] border-[0.5px] border-black/10 ${COLOR_MAP[c].split(' ')[0]}`} />
+                        ))}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center gap-1.5 flex-1 py-1">
+                      <div className="grid grid-cols-3 gap-[1px] w-16 h-16 border border-dashed border-borders/40 p-[2px] rounded-lg">
+                        {[...Array(9)].map((_, i) => <div key={i} className="w-full h-full rounded-[1.5px] bg-charcoal/5" />)}
+                      </div>
+                    </div>
+                  )}
+                  <span className={`text-[9px] font-bold text-center w-full leading-none shrink-0 ${isDone ? 'text-success' : isCurrent ? 'text-accent-orange' : 'text-muted-text/50'}`}>
+                    {isDone ? '✓ Scanned' : isCurrent ? 'Scanning…' : 'Pending'}
+                  </span>
+                </div>
+              );
+            })}
           </div>
 
-          <div className="flex items-center justify-between border-t border-borders/50 pt-4 mt-6">
-            <button
-              onClick={onCancel}
-              className="px-4 py-2 text-xs font-bold rounded-xl text-charcoal bg-white cursor-pointer neo-btn-sm"
-            >
-              Cancel
-            </button>
-
+          {/* Buttons always visible at bottom */}
+          <div className="flex flex-col gap-2 pt-2.5 border-t border-borders/40 shrink-0">
             {Object.values(scannedFaces).every((f) => f !== null) ? (
-              <button
-                onClick={handleFinish}
-                className="px-6 py-2.5 bg-success text-white text-xs font-bold rounded-xl cursor-pointer flex items-center gap-2 neo-btn-sm"
-              >
+              <button onClick={handleFinish} className="w-full py-2.5 bg-success text-white text-xs font-bold rounded-xl cursor-pointer flex items-center justify-center gap-1.5 neo-btn">
                 Complete Scan <ArrowRight className="w-3.5 h-3.5" />
               </button>
             ) : (
-              <div className="flex gap-2">
-                <button
-                  disabled={currentStep === 0}
-                  onClick={() => setCurrentStep((s) => s - 1)}
-                  className="p-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-charcoal bg-white neo-btn-sm"
-                >
-                  <ArrowLeft className="w-4 h-4" />
+              <div className="flex gap-2 w-full">
+                <button disabled={currentStep === 0} onClick={() => setCurrentStep((s) => s - 1)} className="flex-1 py-2 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-charcoal bg-white border border-borders/40 font-bold text-xs flex justify-center items-center gap-1 neo-btn-sm">
+                  <ArrowLeft className="w-3.5 h-3.5" /> Back
                 </button>
-                <button
-                  disabled={currentStep === 5}
-                  onClick={() => setCurrentStep((s) => s + 1)}
-                  className="p-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-charcoal bg-white neo-btn-sm"
-                >
-                  <ArrowRight className="w-4 h-4" />
+                <button disabled={currentStep === 5} onClick={() => setCurrentStep((s) => s + 1)} className="flex-1 py-2 rounded-xl disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-charcoal bg-white border border-borders/40 font-bold text-xs flex justify-center items-center gap-1 neo-btn-sm">
+                  Next <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             )}
+            <button onClick={onCancel} className="w-full py-2 border border-charcoal/20 bg-white text-charcoal text-xs font-bold rounded-xl hover:bg-charcoal/5 hover:border-charcoal/40 transition-smooth cursor-pointer flex items-center justify-center neo-btn-sm">
+              Cancel &amp; Exit
+            </button>
           </div>
         </div>
+
       </div>
     </div>
   );

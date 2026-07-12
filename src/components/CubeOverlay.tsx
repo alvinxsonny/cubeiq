@@ -77,7 +77,7 @@ export default function CubeOverlay({ cubeState, onChange }: CubeOverlayProps) {
   const renderFaceGrid = (faceKey: FaceName) => {
     const stickers = cubeState[faceKey];
     return (
-      <div className="grid grid-cols-3 gap-1.5 p-2 bg-charcoal/5 rounded-xl border border-borders/60 w-32 h-32 relative">
+      <div className="grid grid-cols-3 gap-1 p-1 bg-charcoal/5 rounded-xl border border-borders/60 w-24 h-24 relative">
         {stickers.map((color, idx) => {
           const isCenter = idx === 4;
           const colorStyles = COLOR_MAP[color];
@@ -88,7 +88,7 @@ export default function CubeOverlay({ cubeState, onChange }: CubeOverlayProps) {
               onClick={() => handleStickerClick(faceKey, idx)}
               disabled={isCenter}
               className={`
-                w-full h-full aspect-square rounded-md relative flex items-center justify-center
+                w-full h-full aspect-square rounded-[4px] relative flex items-center justify-center
                 border shadow-sm transition-all duration-200 cursor-pointer
                 ${colorStyles.bg} ${colorStyles.border}
                 ${isCenter ? 'cursor-not-allowed opacity-90' : 'hover:scale-105 active:scale-95'}
@@ -96,7 +96,7 @@ export default function CubeOverlay({ cubeState, onChange }: CubeOverlayProps) {
               title={isCenter ? `Center piece (${faceKey}) - Fixed` : `Click to paint ${selectedColor}`}
             >
               {isCenter && (
-                <Lock className="w-3.5 h-3.5 text-charcoal/30 absolute pointer-events-none" />
+                <Lock className="w-3 h-3 text-charcoal/30 absolute pointer-events-none" />
               )}
             </button>
           );
@@ -106,16 +106,9 @@ export default function CubeOverlay({ cubeState, onChange }: CubeOverlayProps) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-6 p-6 glass-card rounded-3xl w-full max-w-2xl mx-auto">
-      <div className="flex flex-col items-center gap-2">
-        <h3 className="text-lg font-semibold font-geist">2D Face Editor</h3>
-        <p className="text-xs text-muted-text text-center max-w-sm">
-          Select a color from the palette, then tap any sticker to paint. Centers are locked to set the standard orientation.
-        </p>
-      </div>
-
+    <div className="flex flex-col items-center gap-2 py-0 px-1 w-full max-w-2xl mx-auto">
       {/* Color Palette */}
-      <div className="flex items-center justify-center gap-3 p-3 bg-charcoal/5 rounded-2xl border border-borders/60">
+      <div className="flex items-center justify-center gap-4 p-1.5 bg-charcoal/5 rounded-xl border border-borders/60">
         {(Object.keys(COLOR_MAP) as CubeColor[]).map((color) => {
           const colorStyles = COLOR_MAP[color];
           const isSelected = selectedColor === color;
@@ -124,7 +117,7 @@ export default function CubeOverlay({ cubeState, onChange }: CubeOverlayProps) {
               key={color}
               onClick={() => setSelectedColor(color)}
               className={`
-                w-10 h-10 rounded-xl relative flex items-center justify-center transition-all duration-200 cursor-pointer
+                w-8 h-8 rounded-lg relative flex items-center justify-center transition-all duration-200 cursor-pointer
                 border shadow-sm hover:scale-110 active:scale-95
                 ${colorStyles.bg} ${colorStyles.border}
                 ${isSelected ? 'ring-2 ring-accent-orange ring-offset-2 scale-105' : 'opacity-85 hover:opacity-100'}
@@ -136,12 +129,12 @@ export default function CubeOverlay({ cubeState, onChange }: CubeOverlayProps) {
       </div>
 
       {/* 2D Net Layout */}
-      <div className="flex flex-col items-center select-none overflow-x-auto w-full py-4">
-        <div className="grid gap-2" style={{ gridTemplateColumns: 'repeat(4, minmax(130px, 1fr))' }}>
+      <div className="flex flex-col items-center select-none overflow-x-auto w-full py-0">
+        <div className="grid gap-1.5" style={{ gridTemplateColumns: 'repeat(4, minmax(100px, 1fr))' }}>
           {/* Row 1: empty, U, empty, empty */}
           <div />
           <div className="flex flex-col items-center">
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-text mb-1">Up (U)</span>
+            <span className="text-[9px] uppercase tracking-wider font-semibold text-muted-text mb-0.5">Up (U)</span>
             {renderFaceGrid('U')}
           </div>
           <div />
@@ -149,27 +142,27 @@ export default function CubeOverlay({ cubeState, onChange }: CubeOverlayProps) {
 
           {/* Row 2: L, F, R, B */}
           <div className="flex flex-col items-center">
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-text mb-1">Left (L)</span>
+            <span className="text-[9px] uppercase tracking-wider font-semibold text-muted-text mb-0.5">Left (L)</span>
             {renderFaceGrid('L')}
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-text mb-1">Front (F)</span>
+            <span className="text-[9px] uppercase tracking-wider font-semibold text-muted-text mb-0.5">Front (F)</span>
             {renderFaceGrid('F')}
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-text mb-1">Right (R)</span>
+            <span className="text-[9px] uppercase tracking-wider font-semibold text-muted-text mb-0.5">Right (R)</span>
             {renderFaceGrid('R')}
           </div>
           <div className="flex flex-col items-center">
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-text mb-1">Back (B)</span>
+            <span className="text-[9px] uppercase tracking-wider font-semibold text-muted-text mb-0.5">Back (B)</span>
             {renderFaceGrid('B')}
           </div>
 
           {/* Row 3: empty, D, empty, empty */}
           <div />
-          <div className="flex flex-col items-center mt-1">
+          <div className="flex flex-col items-center mt-0.5">
             {renderFaceGrid('D')}
-            <span className="text-[10px] uppercase tracking-wider font-semibold text-muted-text mt-1">Down (D)</span>
+            <span className="text-[9px] uppercase tracking-wider font-semibold text-muted-text mt-0.5">Down (D)</span>
           </div>
           <div />
           <div />
@@ -177,16 +170,16 @@ export default function CubeOverlay({ cubeState, onChange }: CubeOverlayProps) {
       </div>
 
       {/* Helper Controls */}
-      <div className="flex items-center gap-4 mt-2">
+      <div className="flex items-center gap-3 mt-1">
         <button
           onClick={handleReset}
-          className="px-4 py-2 text-xs font-semibold text-charcoal bg-white rounded-xl cursor-pointer neo-btn-sm"
+          className="px-3 py-1.5 text-[10px] font-semibold text-charcoal bg-white rounded-lg cursor-pointer neo-btn-sm"
         >
           Reset Solved State
         </button>
         <button
           onClick={handleClear}
-          className="px-4 py-2 text-xs font-semibold text-cube-red bg-white rounded-xl cursor-pointer neo-btn-sm"
+          className="px-3 py-1.5 text-[10px] font-semibold text-cube-red bg-white rounded-lg cursor-pointer neo-btn-sm"
         >
           Clear Grid (Keep Centers)
         </button>

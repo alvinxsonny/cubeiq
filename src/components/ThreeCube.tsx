@@ -12,6 +12,8 @@ interface ThreeCubeProps {
   onStickerClick?: (face: FaceName, index: number) => void;
   isEditMode?: boolean;
   className?: string;
+  resetCameraTrigger?: number;
+  showHint?: boolean;
 }
 
 // Maps CubeColor to hex colors
@@ -331,6 +333,54 @@ function RubiksCubeGroup({
   return <group>{cubies}</group>;
 }
 
+function CameraController({
+  resetTrigger,
+  controlsRef,
+}: {
+  resetTrigger?: number;
+  controlsRef: React.RefObject<any>;
+}) {
+  const { camera } = useThree();
+  const targetPos = useRef(new THREE.Vector3(4, 4, 6));
+  const isAnimating = useRef(false);
+  const startTime = useRef(0);
+  const startPos = useRef(new THREE.Vector3());
+
+  useEffect(() => {
+    if (resetTrigger !== undefined && resetTrigger > 0) {
+      startPos.current.copy(camera.position);
+      startTime.current = performance.now();
+      isAnimating.current = true;
+    }
+  }, [resetTrigger, camera]);
+
+  useFrame(() => {
+    if (isAnimating.current) {
+      const elapsed = (performance.now() - startTime.current) / 1000;
+      const duration = 0.45; // Reset camera view over 0.45 seconds
+      const t = Math.min(elapsed / duration, 1);
+
+      // Smooth cubic easing
+      const easedT = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+      camera.position.lerpVectors(startPos.current, targetPos.current, easedT);
+      
+      if (controlsRef.current) {
+        controlsRef.current.target.set(0, 0, 0);
+        controlsRef.current.update();
+      } else {
+        camera.lookAt(0, 0, 0);
+      }
+
+      if (t >= 1) {
+        isAnimating.current = false;
+      }
+    }
+  });
+
+  return null;
+}
+
 export default function ThreeCube({
   cubeState,
   currentMove,
@@ -339,15 +389,18 @@ export default function ThreeCube({
   onStickerClick,
   isEditMode = false,
   className = "w-full h-[400px] md:h-[500px] relative rounded-3xl overflow-hidden bg-charcoal/5 border border-borders/50 glass-card",
+  resetCameraTrigger,
+  showHint = true,
 }: ThreeCubeProps) {
   const [autoRotate, setAutoRotate] = useState(true);
+  const controlsRef = useRef<any>(null);
 
-  // Stop auto-rotating once user triggers a cube move
+  // Stop auto-rotating once user triggers a cube move or a camera reset
   useEffect(() => {
-    if (currentMove) {
+    if (currentMove || (resetCameraTrigger && resetCameraTrigger > 0)) {
       setAutoRotate(false);
     }
-  }, [currentMove]);
+  }, [currentMove, resetCameraTrigger]);
 
   return (
     <div className={className}>
@@ -369,6 +422,11 @@ export default function ThreeCube({
         <directionalLight position={[-5, 5, -5]} intensity={0.6} />
         <directionalLight position={[0, -5, 0]} intensity={0.4} />
 
+        <CameraController
+          resetTrigger={resetCameraTrigger}
+          controlsRef={controlsRef}
+        />
+
         <RubiksCubeGroup
           cubeState={cubeState}
           currentMove={currentMove}
@@ -379,6 +437,7 @@ export default function ThreeCube({
         />
 
         <OrbitControls
+          ref={controlsRef}
           enableDamping
           dampingFactor={0.05}
           minDistance={3.5}
@@ -391,11 +450,13 @@ export default function ThreeCube({
       </Canvas>
 
       {/* Floating UX hint */}
-      <div className="absolute bottom-3 right-3 px-3 py-1 bg-charcoal/85 backdrop-blur-md rounded-full border border-white/10 pointer-events-none select-none shadow-sm">
-        <span className="text-[8px] text-white/80 font-geist tracking-wider uppercase font-semibold">
-          {isEditMode ? 'Edit Mode • Drag to rotate' : 'Drag to rotate • Scroll to zoom'}
-        </span>
-      </div>
+      {showHint && (
+        <div className="absolute bottom-3 right-3 px-3 py-1 bg-charcoal/85 backdrop-blur-md rounded-full border border-white/10 pointer-events-none select-none shadow-sm">
+          <span className="text-[8px] text-white/80 font-geist tracking-wider uppercase font-semibold">
+            {isEditMode ? 'Edit Mode • Drag to rotate' : 'Drag to rotate • Scroll to zoom'}
+          </span>
+        </div>
+      )}
     </div>
   );
 }
