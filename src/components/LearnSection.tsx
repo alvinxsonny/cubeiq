@@ -236,7 +236,7 @@ export default function LearnSection() {
 
               <button
                 onClick={resetNotationCube}
-                className="mt-2 self-start px-4 py-2 border border-borders text-xs font-semibold rounded-xl hover:bg-charcoal/5 transition-smooth text-charcoal cursor-pointer"
+                className="mt-2 self-start px-4 py-2 text-xs font-semibold rounded-xl text-charcoal bg-white cursor-pointer neo-btn-sm"
               >
                 Reset Visualizer Cube
               </button>
@@ -377,7 +377,7 @@ export default function LearnSection() {
                   </div>
                   <button
                     onClick={() => startNewQuizQuestion()}
-                    className="px-4 py-2 bg-charcoal hover:bg-charcoal/90 text-white font-bold text-xs rounded-xl shadow-sm cursor-pointer flex items-center gap-1 active:scale-95 transition-smooth"
+                    className="px-4 py-2 bg-charcoal text-white font-bold text-xs rounded-xl cursor-pointer flex items-center gap-1 neo-btn-sm"
                   >
                     Next Question <ChevronRight className="w-3.5 h-3.5" />
                   </button>
@@ -389,7 +389,7 @@ export default function LearnSection() {
                 <button
                   disabled={quizMove !== null}
                   onClick={() => setQuizMove(quizState.currentMove)}
-                  className="px-4 py-2 border border-borders text-xs font-semibold rounded-xl text-charcoal bg-white hover:bg-charcoal/5 transition-smooth cursor-pointer active:scale-95 self-start disabled:opacity-50"
+                  className="px-4 py-2 text-xs font-semibold rounded-xl text-charcoal bg-white cursor-pointer disabled:opacity-50 self-start neo-btn-sm"
                 >
                   Play Animation Again
                 </button>

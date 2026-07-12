@@ -34,6 +34,7 @@ import {
   Menu,
   X,
   Home as HomeIcon,
+  RotateCcw,
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -481,7 +482,7 @@ export default function Home() {
             >
               {/* Hero Section */}
               <div className="grid md:grid-cols-12 gap-8 lg:gap-12 items-center min-h-[calc(100vh-64px-20px)] py-6 md:py-0">
-                <div className="md:col-span-7 flex flex-col gap-8">
+                <div className="md:col-span-6 flex flex-col gap-8 justify-center md:pl-6 lg:pl-12">
                   <div className="flex flex-col gap-4">
                     <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-accent-orange/5 border border-accent-orange/10 rounded-full self-start">
                       <Sparkles className="w-3.5 h-3.5 text-accent-orange" />
@@ -490,7 +491,7 @@ export default function Home() {
                       </span>
                     </div>
                     <h1 className="text-4xl sm:text-5xl font-extrabold font-geist leading-[1.1] tracking-tight text-charcoal">
-                      Solve Any <br />
+                      Solve a 3x3 <br />
                       Rubik's Cube.
                     </h1>
                     <p className="text-sm text-muted-text leading-relaxed max-w-lg">
@@ -506,42 +507,57 @@ export default function Home() {
                         setIsScanning(true);
                         setCurrentView('scanner');
                       }}
-                      className="px-6 py-3 bg-accent-orange text-white text-xs font-bold rounded-2xl shadow-lg shadow-accent-orange/20 hover:bg-accent-orange/90 transition-smooth active:scale-95 cursor-pointer"
+                      className="px-6 py-3 bg-accent-orange text-white text-xs font-bold rounded-2xl neo-btn cursor-pointer"
                     >
                       Start Scanning
                     </button>
                     <button
                       onClick={() => setCurrentView('learn')}
-                      className="px-6 py-3 border border-borders bg-white hover:bg-charcoal/5 text-xs font-bold rounded-2xl text-charcoal shadow-sm transition-smooth cursor-pointer"
+                      className="px-6 py-3 bg-white text-charcoal text-xs font-bold rounded-2xl neo-btn cursor-pointer"
                     >
                       Learn Notation
                     </button>
                   </div>
+
+                  {/* Highlighted Fun Fact Callout */}
+                  <div className="flex items-center gap-4 max-w-lg mt-3 bg-accent-orange/[0.03] border border-accent-orange/20 rounded-3xl p-4 shadow-none backdrop-blur-[1px]">
+                    <div className="p-2 bg-accent-orange/10 border border-accent-orange/20 rounded-2xl text-accent-orange shrink-0">
+                      <Sparkles className="w-4 h-4" />
+                    </div>
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] font-bold text-charcoal uppercase tracking-wider font-geist">Did You Know?</span>
+                      <p className="text-xs leading-relaxed text-muted-text font-geist">
+                        A standard 3x3 Rubik's Cube has over <strong className="text-accent-orange font-bold">43 quintillion</strong> (43,252,003,274,489,856,000) possible configurations, yet every single one is solvable in 20 moves or less.
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                {/* Hero 3D interactive preview */}
-                <div className="md:col-span-5 flex flex-col items-center justify-center w-full relative">
+                 {/* Hero 3D interactive preview */}
+                <div className="md:col-span-6 flex flex-col md:flex-row items-stretch gap-4 w-full relative">
                   <div className="w-full absolute -top-8 -left-8 h-full bg-accent-orange/5 filter blur-3xl pointer-events-none rounded-full" />
+                  
+                  {/* 3D Cube Canvas */}
                   <ThreeCube
                     cubeState={demoCube}
                     currentMove={demoMove}
                     onMoveComplete={handleDemoComplete}
                     animationSpeed={demoQueue.length > 0 ? 3.2 : 0.8}
-                    className="w-full h-[260px] sm:h-[300px] md:h-[360px] lg:h-[400px] relative rounded-3xl overflow-hidden bg-charcoal/5 border border-borders/50 glass-card"
+                    className="flex-1 h-[320px] md:h-[400px] lg:h-[480px] relative rounded-3xl overflow-hidden bg-charcoal/5 border-none shadow-none"
                   />
                   
-                  {/* Cube Interactive Controls */}
-                  <div className="flex flex-col gap-3 mt-6 items-center w-full max-w-sm glass-card p-4 rounded-3xl z-10">
-                    <span className="text-[9px] uppercase font-bold tracking-wider text-muted-text font-geist">Interactive Controls</span>
+                  {/* Vertical Interactive Controls Panel */}
+                  <div className="flex flex-row md:flex-col gap-3 items-center justify-between md:justify-center p-3.5 md:p-3 bg-white/40 rounded-3xl backdrop-blur-sm z-10 shrink-0 md:w-16 neo-card">
+                    <span className="hidden md:block text-[8px] uppercase font-bold tracking-wider text-muted-text font-geist rotate-180 [writing-mode:vertical-lr] select-none my-2">Controls</span>
                     
-                    {/* Face turns Row */}
-                    <div className="grid grid-cols-6 gap-1.5 w-full">
+                    {/* Face turns Group */}
+                    <div className="flex flex-row md:flex-col gap-1.5 flex-1 md:flex-initial justify-center">
                       {['U', 'D', 'L', 'R', 'F', 'B'].map((face) => (
                         <button
                           key={face}
                           onClick={() => handleHeroMove(face)}
-                          disabled={demoMove !== null}
-                          className="px-1.5 py-1 border border-borders rounded-lg text-[10px] font-bold text-charcoal hover:bg-charcoal/5 active:scale-95 disabled:opacity-40 disabled:scale-100 transition-smooth cursor-pointer bg-white"
+                          disabled={demoMove !== null || demoQueue.length > 0}
+                          className="w-8 h-8 flex items-center justify-center rounded-xl text-xs font-bold text-charcoal disabled:opacity-40 disabled:scale-100 cursor-pointer bg-white neo-btn-sm"
                           title={`Turn ${face}`}
                         >
                           {face}
@@ -549,21 +565,26 @@ export default function Home() {
                       ))}
                     </div>
 
-                    {/* Scramble / Reset Row */}
-                    <div className="flex items-center gap-2.5 w-full border-t border-borders/40 pt-2">
+                    {/* Separator line */}
+                    <div className="w-[1px] md:w-8 h-6 md:h-[1px] bg-borders/40 mx-2 md:mx-0 md:my-3 shrink-0" />
+
+                    {/* Scramble / Reset Group */}
+                    <div className="flex flex-row md:flex-col gap-1.5 shrink-0">
                       <button
                         onClick={handleHeroScramble}
-                        disabled={demoMove !== null}
-                        className="flex-1 py-1 bg-charcoal text-white text-[10px] font-bold rounded-lg hover:bg-charcoal/90 active:scale-95 disabled:opacity-40 disabled:scale-100 transition-smooth cursor-pointer text-center"
+                        disabled={demoMove !== null || demoQueue.length > 0}
+                        className="w-8 h-8 flex items-center justify-center bg-white rounded-xl text-charcoal disabled:opacity-40 disabled:scale-100 cursor-pointer neo-btn-sm"
+                        title="Scramble Cube"
                       >
-                        Scramble
+                        <Sparkles className="w-3.5 h-3.5 text-accent-orange" />
                       </button>
                       <button
                         onClick={handleHeroReset}
-                        disabled={demoMove !== null}
-                        className="flex-1 py-1 border border-borders text-[10px] font-bold text-charcoal rounded-lg hover:bg-charcoal/5 active:scale-95 disabled:opacity-40 disabled:scale-100 transition-smooth cursor-pointer text-center bg-white"
+                        disabled={demoMove !== null || demoQueue.length > 0}
+                        className="w-8 h-8 flex items-center justify-center bg-white rounded-xl text-charcoal disabled:opacity-40 disabled:scale-100 cursor-pointer neo-btn-sm"
+                        title="Reset Solved state"
                       >
-                        Reset Solved
+                        <RotateCcw className="w-3.5 h-3.5 text-muted-text" />
                       </button>
                     </div>
                   </div>
@@ -1061,7 +1082,7 @@ export default function Home() {
                 {[
                   {
                     name: 'Instagram',
-                    href: 'https://instagram.com',
+                    href: 'https://instagram.com/_martin.max_',
                     icon: (
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
                         <rect x={2} y={2} width={20} height={20} rx={5} ry={5} />
@@ -1072,7 +1093,7 @@ export default function Home() {
                   },
                   {
                     name: 'LinkedIn',
-                    href: 'https://linkedin.com',
+                    href: 'https://linkedin.com/in/alvinsonny',
                     icon: (
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
                         <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z" />
@@ -1083,7 +1104,7 @@ export default function Home() {
                   },
                   {
                     name: 'X / Twitter',
-                    href: 'https://x.com',
+                    href: 'https://x.com/martinxmathew',
                     icon: (
                       <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
@@ -1118,7 +1139,7 @@ export default function Home() {
               </span>
               <div className="flex flex-col gap-2">
                 <a
-                  href="https://github.com"
+                  href="https://github.com/alvinxsonny/cubeiq"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="group text-xs text-muted-text hover:text-charcoal flex items-center gap-2 transition-smooth cursor-pointer"

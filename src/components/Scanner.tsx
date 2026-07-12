@@ -459,8 +459,8 @@ export default function Scanner({ onScanComplete, onCancel }: ScannerProps) {
                 <CameraOff className="w-12 h-12 mb-3 text-white/35 animate-pulse" />
                 <span className="text-xs font-semibold font-geist mb-4">Camera is inactive</span>
                 
-                <label className="px-4 py-2 bg-white text-charcoal font-semibold text-xs rounded-xl shadow-md cursor-pointer hover:bg-white/90 active:scale-95 transition-all">
-                  <Upload className="w-3.5 h-3.5 inline mr-1.5" />
+                <label className="px-4 py-2 bg-white text-charcoal font-semibold text-xs rounded-xl cursor-pointer neo-btn-sm inline-flex items-center gap-1.5">
+                  <Upload className="w-3.5 h-3.5" />
                   Upload Photo
                   <input
                     type="file"
@@ -480,7 +480,7 @@ export default function Scanner({ onScanComplete, onCancel }: ScannerProps) {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setUseCamera(!useCamera)}
-              className="p-2.5 rounded-xl border border-borders bg-white hover:bg-charcoal/5 transition-smooth cursor-pointer text-charcoal"
+              className="p-2.5 rounded-xl bg-white cursor-pointer text-charcoal neo-btn-sm"
               title={useCamera ? 'Turn Camera Off' : 'Turn Camera On'}
             >
               <Camera className="w-4 h-4" />
@@ -489,7 +489,7 @@ export default function Scanner({ onScanComplete, onCancel }: ScannerProps) {
             {useCamera && devices.length > 1 && (
               <button
                 onClick={switchCamera}
-                className="p-2.5 rounded-xl border border-borders bg-white hover:bg-charcoal/5 transition-smooth cursor-pointer text-charcoal"
+                className="p-2.5 rounded-xl bg-white cursor-pointer text-charcoal neo-btn-sm"
                 title="Switch Camera"
               >
                 <RefreshCw className="w-4 h-4" />
@@ -499,7 +499,7 @@ export default function Scanner({ onScanComplete, onCancel }: ScannerProps) {
             {useCamera && (
               <button
                 onClick={handleCapture}
-                className="px-5 py-2.5 bg-accent-orange text-white text-xs font-bold rounded-xl shadow-md hover:bg-accent-orange/90 active:scale-95 transition-smooth cursor-pointer"
+                className="px-5 py-2.5 bg-accent-orange text-white text-xs font-bold rounded-xl cursor-pointer neo-btn-sm"
               >
                 Capture Face
               </button>
@@ -622,7 +622,7 @@ export default function Scanner({ onScanComplete, onCancel }: ScannerProps) {
           <div className="flex items-center justify-between border-t border-borders/50 pt-4 mt-6">
             <button
               onClick={onCancel}
-              className="px-4 py-2 border border-borders text-xs font-bold rounded-xl text-charcoal bg-white hover:bg-charcoal/5 transition-smooth cursor-pointer"
+              className="px-4 py-2 text-xs font-bold rounded-xl text-charcoal bg-white cursor-pointer neo-btn-sm"
             >
               Cancel
             </button>
@@ -630,7 +630,7 @@ export default function Scanner({ onScanComplete, onCancel }: ScannerProps) {
             {Object.values(scannedFaces).every((f) => f !== null) ? (
               <button
                 onClick={handleFinish}
-                className="px-6 py-2.5 bg-success text-white text-xs font-bold rounded-xl shadow-lg shadow-success/20 hover:bg-success/90 active:scale-95 transition-smooth cursor-pointer flex items-center gap-2"
+                className="px-6 py-2.5 bg-success text-white text-xs font-bold rounded-xl cursor-pointer flex items-center gap-2 neo-btn-sm"
               >
                 Complete Scan <ArrowRight className="w-3.5 h-3.5" />
               </button>
@@ -639,14 +639,14 @@ export default function Scanner({ onScanComplete, onCancel }: ScannerProps) {
                 <button
                   disabled={currentStep === 0}
                   onClick={() => setCurrentStep((s) => s - 1)}
-                  className="p-2 border border-borders rounded-xl hover:bg-charcoal/5 disabled:opacity-50 disabled:cursor-not-allowed transition-smooth cursor-pointer text-charcoal"
+                  className="p-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-charcoal bg-white neo-btn-sm"
                 >
                   <ArrowLeft className="w-4 h-4" />
                 </button>
                 <button
                   disabled={currentStep === 5}
                   onClick={() => setCurrentStep((s) => s + 1)}
-                  className="p-2 border border-borders rounded-xl hover:bg-charcoal/5 disabled:opacity-50 disabled:cursor-not-allowed transition-smooth cursor-pointer text-charcoal"
+                  className="p-2 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer text-charcoal bg-white neo-btn-sm"
                 >
                   <ArrowRight className="w-4 h-4" />
                 </button>

@@ -180,13 +180,13 @@ export default function CubeOverlay({ cubeState, onChange }: CubeOverlayProps) {
       <div className="flex items-center gap-4 mt-2">
         <button
           onClick={handleReset}
-          className="px-4 py-2 text-xs font-semibold text-charcoal bg-charcoal/5 border border-borders hover:bg-charcoal/10 rounded-xl transition-smooth cursor-pointer"
+          className="px-4 py-2 text-xs font-semibold text-charcoal bg-white rounded-xl cursor-pointer neo-btn-sm"
         >
           Reset Solved State
         </button>
         <button
           onClick={handleClear}
-          className="px-4 py-2 text-xs font-semibold text-cube-red bg-cube-red/5 border border-cube-red/20 hover:bg-cube-red/10 rounded-xl transition-smooth cursor-pointer"
+          className="px-4 py-2 text-xs font-semibold text-cube-red bg-white rounded-xl cursor-pointer neo-btn-sm"
         >
           Clear Grid (Keep Centers)
         </button>

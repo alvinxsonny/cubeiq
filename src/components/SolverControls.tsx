@@ -226,7 +226,7 @@ export default function SolverControls({
         <button
           onClick={restartSolve}
           disabled={currentStep === 0 && !activeMove}
-          className="p-3 border border-borders rounded-2xl bg-white hover:bg-charcoal/5 transition-smooth disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-charcoal shadow-sm active:scale-95"
+          className="p-3 bg-white text-charcoal rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer neo-btn-sm"
           title="Restart solve"
         >
           <RotateCcw className="w-4 h-4" />
@@ -235,7 +235,7 @@ export default function SolverControls({
         <button
           onClick={stepBackward}
           disabled={currentStep === 0 || activeMove !== null}
-          className="p-3 border border-borders rounded-2xl bg-white hover:bg-charcoal/5 transition-smooth disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-charcoal shadow-sm active:scale-95"
+          className="p-3 bg-white text-charcoal rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer neo-btn-sm"
           title="Previous move"
         >
           <SkipBack className="w-4 h-4" />
@@ -243,7 +243,7 @@ export default function SolverControls({
 
         <button
           onClick={togglePlay}
-          className="p-5 bg-charcoal text-white hover:bg-charcoal/90 transition-smooth rounded-2xl shadow-md active:scale-95 cursor-pointer flex items-center justify-center"
+          className="p-5 bg-charcoal text-white rounded-2xl cursor-pointer flex items-center justify-center neo-btn"
           title={isPlaying ? 'Pause solve' : 'Play animation'}
         >
           {isPlaying ? <Pause className="w-6 h-6 fill-white" /> : <Play className="w-6 h-6 fill-white ml-0.5" />}
@@ -252,7 +252,7 @@ export default function SolverControls({
         <button
           onClick={stepForward}
           disabled={currentStep >= moves.length || activeMove !== null}
-          className="p-3 border border-borders rounded-2xl bg-white hover:bg-charcoal/5 transition-smooth disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer text-charcoal shadow-sm active:scale-95"
+          className="p-3 bg-white text-charcoal rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer neo-btn-sm"
           title="Next move"
         >
           <SkipForward className="w-4 h-4" />
@@ -319,14 +319,14 @@ export default function SolverControls({
         <div className="flex items-center gap-2">
           <button
             onClick={copyToClipboard}
-            className="px-3 py-1.5 border border-borders bg-white hover:bg-charcoal/5 text-[10px] font-bold rounded-xl text-charcoal transition-smooth cursor-pointer shadow-sm flex items-center gap-1.5"
+            className="px-3 py-1.5 bg-white text-[10px] font-bold rounded-xl text-charcoal cursor-pointer flex items-center gap-1.5 neo-btn-sm"
           >
             <Copy className="w-3.5 h-3.5" />
             {copied ? 'Copied!' : 'Copy'}
           </button>
           <button
             onClick={downloadTextFile}
-            className="px-3 py-1.5 border border-borders bg-white hover:bg-charcoal/5 text-[10px] font-bold rounded-xl text-charcoal transition-smooth cursor-pointer shadow-sm flex items-center gap-1.5"
+            className="px-3 py-1.5 bg-white text-[10px] font-bold rounded-xl text-charcoal cursor-pointer flex items-center gap-1.5 neo-btn-sm"
           >
             <Download className="w-3.5 h-3.5" />
             Download

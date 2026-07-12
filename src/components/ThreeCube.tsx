@@ -107,6 +107,8 @@ function RubiksCubeGroup({
     filter: (x: number, y: number, z: number) => boolean;
     targetAngle: number;
     currentAngle: number;
+    elapsed: number;
+    duration: number;
   } | null>(null);
 
   const activeMoveRef = useRef(activeMove);
@@ -119,33 +121,37 @@ function RubiksCubeGroup({
     if (currentMove && currentMove !== processedMoveRef.current && !activeMove) {
       processedMoveRef.current = currentMove;
       const config = getMoveConfig(currentMove);
+      const speed = 6 * animationSpeed;
+      const duration = Math.abs(config.angle) / speed;
       setActiveMove({
         axis: config.axis,
         filter: config.filter,
         targetAngle: config.angle,
         currentAngle: 0,
+        elapsed: 0,
+        duration: duration > 0 ? duration : 0.05,
       });
     } else if (!currentMove) {
       processedMoveRef.current = null;
     }
-  }, [currentMove, activeMove]);
+  }, [currentMove, activeMove, animationSpeed]);
 
   // Frame loop for turns
   useFrame((state, delta) => {
     if (activeMoveRef.current) {
       const move = { ...activeMoveRef.current };
-      const speed = 6 * animationSpeed; // base turning speed
-      const step = Math.sign(move.targetAngle) * speed * delta;
+      move.elapsed += delta;
 
-      let nextAngle = move.currentAngle + step;
-      let finished = false;
-
-      if (Math.abs(nextAngle) >= Math.abs(move.targetAngle)) {
-        nextAngle = move.targetAngle;
-        finished = true;
+      let progress = move.elapsed / move.duration;
+      if (progress >= 1) {
+        progress = 1;
       }
 
-      if (finished) {
+      // Cosine ease-in-out interpolation for fluid, organic turns
+      const easedProgress = (1 - Math.cos(progress * Math.PI)) / 2;
+      const currentAngle = easedProgress * move.targetAngle;
+
+      if (progress >= 1) {
         setActiveMove(null);
         // Timeout to let parent update logic colors and clear currentMove
         setTimeout(() => {
@@ -154,7 +160,7 @@ function RubiksCubeGroup({
       } else {
         setActiveMove({
           ...move,
-          currentAngle: nextAngle,
+          currentAngle,
         });
       }
     }
@@ -334,10 +340,19 @@ export default function ThreeCube({
   isEditMode = false,
   className = "w-full h-[400px] md:h-[500px] relative rounded-3xl overflow-hidden bg-charcoal/5 border border-borders/50 glass-card",
 }: ThreeCubeProps) {
+  const [autoRotate, setAutoRotate] = useState(true);
+
+  // Stop auto-rotating once user triggers a cube move
+  useEffect(() => {
+    if (currentMove) {
+      setAutoRotate(false);
+    }
+  }, [currentMove]);
+
   return (
     <div className={className}>
       <Canvas
-        camera={{ position: [4, 4, 6], fov: 40 }}
+        camera={{ position: [4, 4, 6], fov: 48 }}
         shadows
         gl={{ antialias: true, alpha: true }}
       >
@@ -369,13 +384,16 @@ export default function ThreeCube({
           minDistance={3.5}
           maxDistance={12}
           enablePan={false}
+          autoRotate={autoRotate}
+          autoRotateSpeed={1.0}
+          onStart={() => setAutoRotate(false)}
         />
       </Canvas>
 
       {/* Floating UX hint */}
-      <div className="absolute bottom-3 right-3 px-2 py-0.5 bg-charcoal/80 backdrop-blur-md rounded-md border border-white/10 pointer-events-none select-none">
+      <div className="absolute bottom-3 right-3 px-3 py-1 bg-charcoal/85 backdrop-blur-md rounded-full border border-white/10 pointer-events-none select-none shadow-sm">
         <span className="text-[8px] text-white/80 font-geist tracking-wider uppercase font-semibold">
-          {isEditMode ? 'Edit Mode • Drag to rotate' : 'Drag to rotate'}
+          {isEditMode ? 'Edit Mode • Drag to rotate' : 'Drag to rotate • Scroll to zoom'}
         </span>
       </div>
     </div>
