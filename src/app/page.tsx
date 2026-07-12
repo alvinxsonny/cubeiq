@@ -128,11 +128,11 @@ export default function Home() {
                 </span>
               </div>
               <h1 className="text-4xl sm:text-5xl font-extrabold font-geist leading-[1.1] tracking-tight text-charcoal">
-                Solve a 3x3 <br />
-                Rubik's Cube.
+                Turn any 3x3 Cube <br />
+                into a <span className="text-accent-orange">Smart Cube</span>
               </h1>
               <p className="text-sm text-muted-text leading-relaxed max-w-lg">
-                Scan your cube with your camera or paint it in 2D. Watch it reconstruct in a premium 3D canvas, and learn to solve it layer-by-step with optimal algorithms.
+                Easily learn how to solve a 3x3 Rubik's Cube. Scan your cube with your camera or paint it in 2D. Watch it reconstruct in a premium 3D canvas, and learn to solve it layer-by-step with optimal algorithms.
               </p>
             </div>
 

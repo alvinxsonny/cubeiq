@@ -34,6 +34,7 @@ export default function ScanPage() {
 
   const [isEditing2D, setIsEditing2D] = useState<boolean>(false);
   const [validationError, setValidationError] = useState<string | null>(null);
+  const [resetCameraTrigger, setResetCameraTrigger] = useState<number>(0);
 
   const { isSolving, solveCube } = useSolver();
 
@@ -293,34 +294,36 @@ export default function ScanPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -15 }}
             transition={{ duration: 0.25 }}
-            className="grid md:grid-cols-12 gap-8 items-start w-full"
+            className="grid lg:grid-cols-12 gap-6 items-stretch w-full"
           >
             {/* Left: 3D Animated Canvas */}
-            <div className="md:col-span-7 flex flex-col gap-4">
-              <div className="flex items-center justify-between">
-                <div className="flex flex-col gap-0.5">
-                  <h3 className="text-lg font-bold font-geist">Interactive 3D Solver</h3>
-                  <p className="text-xs text-muted-text">Play, pause, or step through moves at your own speed.</p>
-                </div>
-                <button
-                  onClick={() => { setCubeState(scrambleState); setActiveMove(null); }}
-                  className="px-3 py-1.5 border border-borders text-[10px] font-bold rounded-xl text-charcoal hover:bg-charcoal/5 shadow-sm transition-smooth cursor-pointer"
-                >
-                  Reset Cube to Start
-                </button>
+            <div className="lg:col-span-5 flex flex-col gap-3 justify-between h-full">
+              <div className="flex flex-col gap-0.5 shrink-0">
+                <h3 className="text-lg font-bold font-geist text-charcoal">Interactive 3D Solver</h3>
+                <p className="text-xs text-muted-text">Play, pause, or step through moves at your own speed.</p>
               </div>
 
-              <ThreeCube
-                cubeState={cubeState}
-                currentMove={activeMove}
-                onMoveComplete={handle3DMoveComplete}
-                animationSpeed={animationSpeed}
-                showHint={false}
-              />
+              <div className="flex-1 flex flex-col bg-white/40 border border-borders/50 rounded-2xl p-4 shadow-sm relative overflow-hidden h-full min-h-[420px]">
+                <ThreeCube
+                  cubeState={cubeState}
+                  currentMove={activeMove}
+                  onMoveComplete={handle3DMoveComplete}
+                  animationSpeed={animationSpeed}
+                  showHint={false}
+                  resetCameraTrigger={resetCameraTrigger}
+                  className="w-full h-full flex-1"
+                />
+              </div>
+
+              {/* Align layout height cleanly with the button in right column */}
+              <div className="h-[38px] hidden lg:block shrink-0" />
             </div>
 
             {/* Right: Playback Controls */}
-            <div className="md:col-span-5 flex flex-col gap-6">
+            <div className="lg:col-span-7 flex flex-col gap-3 justify-between h-full">
+              {/* Align layout height cleanly with the title header in left column */}
+              <div className="h-[44px] hidden lg:block shrink-0" />
+
               <SolverControls
                 solutionStr={solutionStr}
                 cubeState={cubeState}
@@ -331,6 +334,8 @@ export default function ScanPage() {
                 moveDirection={moveDirection}
                 animationSpeed={animationSpeed}
                 setAnimationSpeed={setAnimationSpeed}
+                onResetCamera={() => setResetCameraTrigger(prev => prev + 1)}
+                className="flex-grow flex-1 h-full"
               />
               <button
                 onClick={() => {
@@ -338,7 +343,7 @@ export default function ScanPage() {
                   setScrambleState(DEFAULT_SOLVED_STATE);
                   setScanView('scanning');
                 }}
-                className="w-full py-3 border border-borders text-xs font-bold rounded-2xl text-charcoal hover:bg-charcoal/5 bg-white shadow-sm transition-smooth cursor-pointer"
+                className="w-max px-6 py-2 mx-auto border border-borders text-xs font-bold rounded-xl text-charcoal hover:bg-charcoal/5 bg-white shadow-sm transition-smooth cursor-pointer shrink-0"
               >
                 Scan a New Cube
               </button>
