@@ -254,52 +254,70 @@ export default function Home() {
             <div className="hidden md:block absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-[2px] bg-borders/60" />
 
             {/* 1974 */}
-            <div className="relative flex flex-col md:flex-row md:justify-start md:items-start w-full mb-12 md:mb-20 group">
-              <div className="absolute -left-[9px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-accent-orange border-4 border-cloud-white z-10 top-1" />
-              <div className="pl-6 md:pl-0 md:w-1/2 md:pr-12 md:text-right flex flex-col items-start md:items-end gap-3">
+            <div className="relative flex flex-col md:flex-row md:items-center w-full mb-12 md:mb-20 group">
+              <div className="absolute -left-[9px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-accent-orange border-4 border-cloud-white z-10 top-1 md:top-1/2 md:-translate-y-1/2" />
+              
+              {/* Left column on desktop (Text) */}
+              <div className="pl-6 md:pl-0 md:w-1/2 md:pr-12 md:text-right flex flex-col items-start md:items-end gap-2">
                 <span className="text-xs font-bold text-accent-orange font-geist">1974</span>
                 <h3 className="font-bold text-base font-geist text-charcoal">The Wooden Prototype</h3>
-                <p className="text-xs text-muted-text leading-relaxed max-w-sm">
+                <p className="text-xs text-muted-text leading-relaxed max-w-sm md:ml-auto">
                   Ernő Rubik, a Hungarian architecture professor, created a wooden prototype in Budapest to help his students understand 3D geometry and structural design.
                 </p>
+              </div>
+
+              {/* Right column on desktop (Image) */}
+              <div className="pl-6 md:pl-12 md:w-1/2 mt-3 md:mt-0 flex justify-start">
                 <img
                   src="/rubiks_wooden_prototype.png"
                   alt="Original 1974 Wooden Rubik's Cube Prototype"
-                  className="w-48 rounded-2xl border border-borders shadow-sm mt-1 hover:scale-[1.02] transition-smooth select-none"
+                  className="w-48 rounded-2xl border border-borders shadow-sm hover:scale-[1.02] transition-smooth select-none"
                 />
               </div>
             </div>
 
             {/* 1980 */}
-            <div className="relative flex flex-col md:flex-row md:justify-end md:items-start w-full mb-12 md:mb-20 group">
-              <div className="absolute -left-[9px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-accent-orange border-4 border-cloud-white z-10 top-1" />
-              <div className="pl-6 md:pl-0 md:w-1/2 md:pl-12 flex flex-col items-start gap-3">
+            <div className="relative flex flex-col md:flex-row-reverse md:items-center w-full mb-12 md:mb-20 group">
+              <div className="absolute -left-[9px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-accent-orange border-4 border-cloud-white z-10 top-1 md:top-1/2 md:-translate-y-1/2" />
+              
+              {/* Text container: Right on desktop, Top on mobile */}
+              <div className="pl-6 md:pl-12 md:w-1/2 flex flex-col items-start gap-2">
                 <span className="text-xs font-bold text-accent-orange font-geist">1980</span>
                 <h3 className="font-bold text-base font-geist text-charcoal">Global Phenomenon</h3>
                 <p className="text-xs text-muted-text leading-relaxed max-w-sm">
                   Licensed to Ideal Toy Corp and renamed the Rubik's Cube, the puzzle took the world by storm, selling over 450 million copies to become the best-selling toy in history.
                 </p>
+              </div>
+
+              {/* Image container: Left on desktop, Bottom on mobile */}
+              <div className="pl-6 md:pl-0 md:pr-12 md:w-1/2 mt-3 md:mt-0 flex justify-start md:justify-end">
                 <img
                   src="/rubiks_classic_1980.png"
                   alt="Classic 1980 Rubik's Cube"
-                  className="w-48 rounded-2xl border border-borders shadow-sm mt-1 hover:scale-[1.02] transition-smooth select-none"
+                  className="w-48 rounded-2xl border border-borders shadow-sm hover:scale-[1.02] transition-smooth select-none"
                 />
               </div>
             </div>
 
             {/* Modern Era */}
-            <div className="relative flex flex-col md:flex-row md:justify-start md:items-start w-full group">
-              <div className="absolute -left-[9px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-accent-orange border-4 border-cloud-white z-10 top-1" />
-              <div className="pl-6 md:pl-0 md:w-1/2 md:pr-12 md:text-right flex flex-col items-start md:items-end gap-3">
+            <div className="relative flex flex-col md:flex-row md:items-center w-full group">
+              <div className="absolute -left-[9px] md:left-1/2 md:-translate-x-1/2 w-4 h-4 rounded-full bg-accent-orange border-4 border-cloud-white z-10 top-1 md:top-1/2 md:-translate-y-1/2" />
+              
+              {/* Left column on desktop (Text) */}
+              <div className="pl-6 md:pl-0 md:w-1/2 md:pr-12 md:text-right flex flex-col items-start md:items-end gap-2">
                 <span className="text-xs font-bold text-accent-orange font-geist">Modern Era</span>
                 <h3 className="font-bold text-base font-geist text-charcoal">Speedcubing &amp; Math</h3>
-                <p className="text-xs text-muted-text leading-relaxed max-w-sm">
+                <p className="text-xs text-muted-text leading-relaxed max-w-sm md:ml-auto">
                   Today, speedcubers solve stickerless magnetic cubes in under 4 seconds. Mathematicians proved any of the 43 quintillion states can be solved in 20 moves or less.
                 </p>
+              </div>
+
+              {/* Right column on desktop (Image) */}
+              <div className="pl-6 md:pl-12 md:w-1/2 mt-3 md:mt-0 flex justify-start">
                 <img
                   src="/rubiks_modern_speedcube.png"
                   alt="Modern Magnetic Speedcube"
-                  className="w-48 rounded-2xl border border-borders shadow-sm mt-1 hover:scale-[1.02] transition-smooth select-none"
+                  className="w-48 rounded-2xl border border-borders shadow-sm hover:scale-[1.02] transition-smooth select-none"
                 />
               </div>
             </div>

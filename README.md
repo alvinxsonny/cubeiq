@@ -1,36 +1,24 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CubeIQ 🧩
 
-## Getting Started
+CubeIQ is an interactive 3D web application designed to help cubers scan, solve, and master the 3x3 Rubik's Cube. It provides clean visualization cards, a God's Algorithm math timeline, a layer-by-layer Beginner Method, and an interactive learning check-sheet for the advanced CFOP Method.
 
-First, run the development server:
+## 🚀 Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Interactive 3D Notation Guide**: Hover over moves to watch high-fidelity 3D Rubik's Cube animations play instantly, aligned logically with standard speedcubing notation.
+- **God's Algorithm solver math**: Explains Kociemba's Two-Phase Reduction solver, state space calculations, and why the cube can always be solved in 20 moves or less.
+- **Layer-by-Layer Beginner Method**: A clean sequential tutorial featuring goal visual indicators, custom note cards, black inline baseline-aligned point arrows, and centered algorithm badges.
+- **CFOP Speedcubing Suite**: Interactive tables supporting 2-Look OLL, 2-Look PLL, Full OLL, and Full PLL with progress-tracking checklist rows saved locally in browser cache.
+- **Tactile Celebration Banner**: A brutalist styled white congratulations trophy card that triggers an HTML5 canvas confetti spread upon hover.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Technology Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework**: [Next.js](https://nextjs.org/) (React 19, App Router)
+- **3D graphics**: [Three.js](https://threejs.org/) via React Three Fiber (`@react-three/fiber` & `@react-three/drei`)
+- **Animations**: [Framer Motion](https://www.framer.com/motion/)
+- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
+- **Effects**: [Canvas Confetti](https://www.npmjs.com/package/canvas-confetti)
+- **Icons**: [Lucide React](https://lucide.dev/)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+<div align="center">
+  <h3>Made by Alvin</h3>
+</div>

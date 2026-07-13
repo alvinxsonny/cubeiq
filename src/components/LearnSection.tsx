@@ -1,6 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { BookOpen, GraduationCap, Search, Cpu, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import confetti from 'canvas-confetti';
 
 interface NotationItem {
   key: string;
@@ -462,6 +463,34 @@ function GodsAlgorithmIllustration() {
   );
 }
 
+function BeginnerPoint({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex gap-2.5 items-baseline text-[15px] text-charcoal/90 leading-relaxed text-left">
+      <span className="text-charcoal font-black flex-shrink-0 select-none text-base">→</span>
+      <span className="font-medium">{children}</span>
+    </div>
+  );
+}
+
+function BeginnerNote({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="px-4 py-3 bg-accent-orange/[0.03] border border-accent-orange/15 rounded-2xl max-w-3xl text-[13.5px] text-muted-text leading-relaxed text-left my-1">
+      <span className="font-bold text-accent-orange font-geist"># Note: </span>
+      <span className="font-medium">{children}</span>
+    </div>
+  );
+}
+
+function BeginnerAlgo({ alg }: { alg: string }) {
+  return (
+    <div className="my-2 w-full flex justify-center">
+      <span className="font-mono text-xs md:text-sm bg-blue-500/5 px-5 py-2.5 rounded-xl border border-blue-500/20 inline-block font-bold select-all text-blue-600 tracking-wide shadow-sm text-center">
+        {alg}
+      </span>
+    </div>
+  );
+}
+
 export default function LearnSection() {
   const [activeTab, setActiveTab] = useState<'notation' | 'gods-algorithm' | 'beginner' | 'cfop'>('notation');
   const [activeCfopCat, setActiveCfopCat] = useState<'2look-oll' | '2look-pll' | 'oll' | 'pll'>('2look-oll');
@@ -483,6 +512,25 @@ export default function LearnSection() {
     const newStates = { ...completedAlgs, [key]: !completedAlgs[key] };
     setCompletedAlgs(newStates);
     localStorage.setItem('cubeiq-cfop-progress', JSON.stringify(newStates));
+  };
+
+  const triggerConfetti = (event: React.MouseEvent<HTMLDivElement>) => {
+    try {
+      const rect = event.currentTarget.getBoundingClientRect();
+      const x = rect.left + rect.width / 2;
+      const y = rect.top + rect.height / 2;
+      confetti({
+        origin: {
+          x: x / window.innerWidth,
+          y: y / window.innerHeight,
+        },
+        spread: 80,
+        particleCount: 100,
+        disableForReducedMotion: true,
+      });
+    } catch (e) {
+      console.error('Confetti error:', e);
+    }
   };
   
   const [highlightedSearchKey, setHighlightedSearchKey] = useState<string | null>(null);
@@ -695,9 +743,9 @@ export default function LearnSection() {
               </p>
               <ul className="list-disc list-inside text-xs text-muted-text leading-relaxed flex flex-col gap-2 pl-2">
                 <li><span className="font-bold text-charcoal">8! (40,320):</span> There are 8 corner pieces which can be arranged in any position.</li>
-                <li><span className="font-bold text-charcoal">3⁷ (2,187):</span> Each corner has 3 orientations. Once 7 corners are oriented, the 8th orientation is locked by parity constraints (hence $3^7$, not $3^8$).</li>
+                <li><span className="font-bold text-charcoal">3<sup>7</sup> (2,187):</span> Each corner has 3 orientations. Once 7 corners are oriented, the 8th orientation is locked by parity constraints (hence 3<sup>7</sup>, not 3<sup>8</sup>).</li>
                 <li><span className="font-bold text-charcoal">12! (479,001,600):</span> There are 12 edge pieces which can be arranged in any position.</li>
-                <li><span className="font-bold text-charcoal">2¹⁰ (1,024):</span> Each edge has 2 orientations. Similar to corners, the 11th edge orientation locks the 12th (hence $2^{10}$, not $2^{11}$).</li>
+                <li><span className="font-bold text-charcoal">2<sup>10</sup> (1,024):</span> Each edge has 2 orientations. Similar to corners, the 11th edge orientation locks the 12th (hence 2<sup>10</sup>, not 2<sup>11</sup>).</li>
                 <li><span className="font-bold text-charcoal">Division by 2:</span> Due to the physical mechanics of the cube, only half of all mathematically possible configurations can actually be reached by turning the faces. Doing a single corner twist or single edge swap makes the cube unsolvable.</li>
               </ul>
             </div>
@@ -842,286 +890,319 @@ export default function LearnSection() {
             </div>
 
             {/* Step 1 */}
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
               <h4 className="text-lg font-bold text-charcoal font-geist border-b border-borders/20 pb-1">Step 1. White Cross</h4>
               
-              <div className="flex flex-col gap-2 items-center w-full">
-                <BeginnerMethodImage num={1} label="Hold white center on top → Solve white cross edges" />
+              <div className="flex flex-col gap-2 items-center w-full my-2">
+                <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Goal</span>
+                <BeginnerMethodImage num={1} label="Goal: White Cross" />
               </div>
 
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm text-charcoal/80">Hold the white center piece on top, and find an edge in the bottom layer that has white on it.</h5>
-                <p><span className="font-bold">Note:</span> An edge piece has 2 colors on it.</p>
-                <h5 className="font-bold text-sm text-charcoal/80">Look at the edge piece's other color, and turn the bottom layer so the edge is under the center of the same color.</h5>
-                <h5 className="font-bold text-sm text-charcoal/80">Turn that face to bring the edge piece to the top.</h5>
-              </div>
-
-              {/* Substep 1.1 */}
-              <div className="flex flex-col gap-2 text-xs text-charcoal/90 leading-relaxed">
-                <span className="font-bold text-sm text-charcoal/70">Example Turns:</span>
-                <div className="flex flex-col items-center w-full mt-1">
-                  <BeginnerMethodImage num={2} label="Example turns sequence" />
+              <div className="flex flex-col gap-3">
+                <BeginnerPoint>Hold the white center piece on top, and find an edge in the bottom layer that has white on it.</BeginnerPoint>
+                <BeginnerPoint>Align that edge piece with its corresponding center colour, and do a F2 move to bring it to the top layer.</BeginnerPoint>
+                
+                <div className="flex flex-col gap-2 items-center w-full my-2">
+                  <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Example Scenario #1</span>
+                  <BeginnerMethodImage num={2} label="Example Scenario #1" />
                 </div>
-              </div>
 
-              {/* Substep 1.2 */}
-              <div className="flex flex-col gap-2 text-xs text-charcoal/90 leading-relaxed">
-                <span className="font-bold text-sm text-charcoal/70">Another Example:</span>
-                <div className="flex flex-col items-center w-full mt-1">
-                  <BeginnerMethodImage num={3} label="Another example turns sequence" />
+                <div className="flex flex-col gap-2 items-center w-full my-2">
+                  <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Example Scenario #2</span>
+                  <BeginnerMethodImage num={3} label="Example Scenario #2" />
                 </div>
-              </div>
 
-              {/* Substep 1.3 */}
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-2">
-                <h5 className="font-bold text-sm">Anytime an edge piece is flipped (example above), fix it by doing the following moves:</h5>
-                <div className="flex flex-col items-center w-full mt-1">
-                  <BeginnerMethodImage num={4} label="Flipped edge fix moves sequence" />
+                <BeginnerPoint>Anytime an edge piece is flipped (example above), fix it by doing the following moves:</BeginnerPoint>
+                
+                <div className="flex flex-col items-center w-full my-2">
+                  <BeginnerMethodImage num={4} label="Flipped edge correction sequence" />
                 </div>
-              </div>
 
-              {/* Substep 1.4 */}
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-2">
-                <h5 className="font-bold text-sm">Anytime you find a white edge piece that is not in the bottom layer, you can move it into the bottom by doing the following moves:</h5>
-                <div className="flex flex-col items-center w-full mt-1">
-                  <BeginnerMethodImage num={5} label="Stuck edge bottom moves sequence" />
+                <BeginnerPoint>Anytime you find a white edge piece that is not in the bottom layer, you can move it into the bottom by doing the following moves:</BeginnerPoint>
+
+                <div className="flex flex-col items-center w-full my-2">
+                  <BeginnerMethodImage num={5} label="Stuck edge to bottom layer moves" />
                 </div>
-                <h5 className="font-bold text-sm mt-2">And then solve it like you would for any white edge in the bottom layer.</h5>
-                <h5 className="font-bold text-sm text-charcoal/80">Solve all 4 of the white edge pieces to make a cross. Make sure you always look at both colors on each piece so that you end up with the side colors matching as well.</h5>
+
+                <BeginnerPoint>Solve all 4 of the white edge pieces to make the cross. Make sure you always look at both colors on each piece so that you end up with the side centers matching as well.</BeginnerPoint>
               </div>
             </div>
 
             <SectionDivider />
 
             {/* Step 2 */}
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
               <h4 className="text-lg font-bold text-charcoal font-geist border-b border-borders/20 pb-1">Step 2. First Layer</h4>
               
-              <div className="flex flex-col gap-2 items-center w-full">
-                <BeginnerMethodImage num={6} label="White cross on bottom → Solved first layer white corners" />
+              <div className="flex flex-col gap-2 items-center w-full my-2">
+                <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Goal</span>
+                <BeginnerMethodImage num={6} label="Goal: First Layer" />
               </div>
 
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm">Hold the white cross on the bottom.</h5>
-                <h5 className="font-bold text-sm">Before solving anything, do this 4-move sequence repeatedly until you have it memorized. It will be very important later on!</h5>
-              </div>
-
-              {/* Right 4-moves */}
-              <div className="flex flex-col gap-2 text-xs text-charcoal/90 leading-relaxed">
-                <span className="font-bold text-sm text-charcoal/70">Right handed 4-moves:</span>
-                <div className="flex flex-col items-center w-full mt-1">
-                  <BeginnerMethodImage num={7} label="Right 4-moves sequence" />
-                </div>
-              </div>
-
-              {/* Left 4-moves */}
-              <div className="flex flex-col gap-2 text-xs text-charcoal/90 leading-relaxed">
-                <span className="font-bold text-sm text-charcoal/70">Left handed 4-moves:</span>
-                <div className="flex flex-col items-center w-full mt-1">
-                  <BeginnerMethodImage num={8} label="Left 4-moves sequence" />
-                </div>
-              </div>
-
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm">Now we'll use the 4-moves to solve the first layer.</h5>
-                <h5 className="font-bold text-sm">With the cross on the bottom, find a corner piece in the top layer with white on it. Turn the top layer so the surrounding centers match the colors on the corner.</h5>
-                <p><span className="font-bold">Note:</span> A corner piece has 3 colors on it.</p>
+              <div className="flex flex-col gap-3">
+                <BeginnerPoint>Hold the white cross on the bottom.</BeginnerPoint>
+                <BeginnerPoint>Before we proceed with solving further, we need to study our 1st Mini Algorithm.</BeginnerPoint>
+                <BeginnerPoint>You can perform this algorithm from the current state of the cube on any side. It will not mess up our white cross.</BeginnerPoint>
                 
-                <div className="flex flex-col items-center w-full">
-                  <BeginnerMethodImage num={9} label="Surrounding centers matching corner colors" />
+                <p className="text-xs font-semibold text-charcoal/80 my-1">This algorithm will be very important later on.</p>
+
+                <BeginnerPoint>We name it the 4-move sequence, and it has 2 variants: Right-Hand version, and Left-Hand version.</BeginnerPoint>
+                
+                <div className="flex flex-col gap-1 mt-2">
+                  <BeginnerPoint>Right-Hand version:</BeginnerPoint>
+                  <BeginnerAlgo alg="R U R' U'" />
+                  <div className="flex flex-col items-center w-full my-2">
+                    <BeginnerMethodImage num={7} label="Right-Hand 4-move sequence" />
+                  </div>
                 </div>
 
-                <h5 className="font-bold text-sm">Hold the cube so the corner piece is on the front/right, and repeat the right handed 4-moves until this corner is solved.</h5>
-
-                <div className="flex flex-col items-center w-full">
-                  <BeginnerMethodImage num={10} label="Corner solved in slot sequence" />
+                <div className="flex flex-col gap-1 mt-2">
+                  <BeginnerPoint>Left-Hand version:</BeginnerPoint>
+                  <BeginnerAlgo alg="L' U' L U" />
+                  <div className="flex flex-col items-center w-full my-2">
+                    <BeginnerMethodImage num={8} label="Left-Hand 4-move sequence" />
+                  </div>
                 </div>
 
-                <h5 className="font-bold text-sm">You can also use the left 4-moves if you hold the piece on the front/left to start.</h5>
-                <h5 className="font-bold text-sm">Repeat until all of the first layer corners are solved. If find a white corner incorrectly stuck in the bottom layer, you can bring it into the top layer by holding it on the front/right and doing the right 4-moves.</h5>
+                <BeginnerPoint>Now we will use this 4-move sequence to solve the first layer of our cube.</BeginnerPoint>
+                <BeginnerPoint>With the white cross on the bottom, find a corner piece, that has white on it and bring it to the top layer, above its matching colours. (Use the same 4-move sequence to do so)</BeginnerPoint>
+
+                <div className="flex flex-col gap-2 items-center w-full my-2">
+                  <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Example</span>
+                  <BeginnerMethodImage num={9} label="Example: Corner aligned" />
+                </div>
+
+                <BeginnerPoint>Once the corner piece is found and brought to its correct position, you can repeat the 4-move sequence, either right or left hand, (depending on which side the corner piece is at), until the corner piece is solved correctly (i.e the white sticker is facing bottom)</BeginnerPoint>
+
+                <div className="flex flex-col items-center w-full my-2">
+                  <BeginnerMethodImage num={10} label="Corner solved sequence" />
+                </div>
+
+                <BeginnerPoint>Repeat the above steps until all 4 corners are solved.</BeginnerPoint>
               </div>
             </div>
 
             <SectionDivider />
 
             {/* Step 3 */}
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
               <h4 className="text-lg font-bold text-charcoal font-geist border-b border-borders/20 pb-1">Step 3. Second Layer</h4>
               
-              <div className="flex flex-col gap-2 items-center w-full">
-                <BeginnerMethodImage num={11} label="First layer solved → First two layers solved (F2L)" />
+              <div className="flex flex-col gap-2 items-center w-full my-2">
+                <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Goal</span>
+                <BeginnerMethodImage num={11} label="Goal: Second Layer" />
               </div>
 
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm">Find an edge piece in the top layer without yellow as either of its 2 colors.</h5>
-                <h5 className="font-bold text-sm">Turn the top so that it matches a center.</h5>
-                <h5 className="font-bold text-sm">Face the piece and check if the top color matches the right center or left center.</h5>
-              </div>
+              <div className="flex flex-col gap-3">
+                <BeginnerPoint>Our next step is to solve the second layer of our cube, for which, we will need to find an edge piece in the top layer that does not have yellow on it.</BeginnerPoint>
+                <BeginnerPoint>Align that edge piece to its respective center colour, and check the top colour of that edge piece.</BeginnerPoint>
 
-              <div className="flex flex-col items-center w-full">
-                <BeginnerMethodImage num={12} label="Matches right center / matches left center check" />
-              </div>
-
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm">If it matches the <span className="underline">right</span> side, do the following moves:</h5>
-
-                <div className="flex flex-col items-center w-full">
-                  <BeginnerMethodImage num={13} label="Matches right side algorithm sequence" />
+                <div className="flex flex-col items-center w-full my-2">
+                  <BeginnerMethodImage num={12} label="Align edge color" />
                 </div>
 
-                <h5 className="font-bold text-sm mt-2">If it matches the <span className="underline">left</span> side, do the following moves:</h5>
+                <BeginnerPoint>Depending on the color on the top of the edge piece, we will either perform Right-Hand Algorithm, or Left-Hand Algorithm.</BeginnerPoint>
 
-                <div className="flex flex-col items-center w-full">
-                  <BeginnerMethodImage num={14} label="Matches left side algorithm sequence" />
+                <BeginnerNote>This Right-Hand/Left-Hand Algorithm is not the same as the 4-move sequence we performed in step 2.</BeginnerNote>
+
+                <div className="flex flex-col gap-1 mt-2">
+                  <BeginnerPoint>If it matches the right side, do the following moves:</BeginnerPoint>
+                  <BeginnerAlgo alg="U R U' R' U' F' U F" />
+                  <div className="flex flex-col items-center w-full my-2">
+                    <BeginnerMethodImage num={13} label="Right-Hand algorithm sequence" />
+                  </div>
                 </div>
 
-                <h5 className="font-bold text-sm">Repeat this until all of the 2nd layer edges are solved.</h5>
-                <h5 className="font-bold text-sm">If an edge you are looking for is stuck somewhere in the 2nd layer, move any edge into its spot using one of the 2 algorithms above. This will cause the edge to come out into the top layer.</h5>
+                <div className="flex flex-col gap-1 mt-2">
+                  <BeginnerPoint>If it matches the left side, do the following moves:</BeginnerPoint>
+                  <BeginnerAlgo alg="U' L' U L U F U' F'" />
+                  <div className="flex flex-col items-center w-full my-2">
+                    <BeginnerMethodImage num={14} label="Left-Hand algorithm sequence" />
+                  </div>
+                </div>
+
+                <BeginnerPoint>Repeat the above steps until all 4 edges are solved.</BeginnerPoint>
+                <BeginnerPoint>If an edge you are looking for is stuck somewhere in the 2nd layer, move any edge into its spot using one of the 2 algorithms above. This will cause the edge to come out into the top layer.</BeginnerPoint>
               </div>
             </div>
 
             <SectionDivider />
 
             {/* Step 4 */}
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
               <h4 className="text-lg font-bold text-charcoal font-geist border-b border-borders/20 pb-1">Step 4. Top Cross</h4>
               
-              <div className="flex flex-col gap-2 items-center w-full">
-                <BeginnerMethodImage num={15} label="F2L solved → Yellow cross solved on top" />
+              <div className="flex flex-col gap-2 items-center w-full my-2">
+                <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Goal</span>
+                <BeginnerMethodImage num={15} label="Goal: Top Cross" />
               </div>
 
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm">Hold the cube to match one of the following (ignore the corner pieces):</h5>
-              </div>
+              <div className="flex flex-col gap-3">
+                <BeginnerPoint>Our next step is to make a Yellow Cross on the top.</BeginnerPoint>
+                <BeginnerPoint>Hold the cube to match one of the following (ignore the corner pieces):</BeginnerPoint>
 
-              <div className="flex flex-col items-center w-full">
-                <BeginnerMethodImage num={16} label="Top cross cases (Dot / L-Shape / Line / Cross)" />
-              </div>
+                <div className="flex flex-col items-center w-full my-2">
+                  <BeginnerMethodImage num={16} label="Top cross orientations" />
+                </div>
 
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm">Then do the following moves:</h5>
+                <BeginnerPoint>Then do the following algorithm:</BeginnerPoint>
+                <BeginnerAlgo alg="F R U R' U' F'" />
 
-                <div className="flex flex-col items-center w-full">
+                <div className="flex flex-col items-center w-full my-2">
                   <BeginnerMethodImage num={17} label="Top cross algorithm sequence" />
                 </div>
 
-                <h5 className="font-bold text-sm">If the cross is not solved yet, hold the cube to match the new case and repeat.</h5>
-                <p><span className="font-bold">Note:</span> Focus on the colors on edge pieces, and not corner pieces. If you have 1 or 3 edge pieces facing up, your cube is unsolvable, and needs to be taken apart and reassembled.</p>
+                <BeginnerPoint>If the cross is not solved yet, hold the cube to match the new case and repeat.</BeginnerPoint>
+
+                <BeginnerNote>Focus on the colors on edge pieces, and not corner pieces. If you have 1 or 3 edge pieces facing up, your cube is unsolvable, and needs to be taken apart and reassembled.</BeginnerNote>
               </div>
             </div>
 
             <SectionDivider />
 
             {/* Step 5 */}
-            <div className="flex flex-col gap-5">
-              <h4 className="text-lg font-bold text-charcoal font-geist border-b border-borders/20 pb-1">Step 5. Match Cross Colors</h4>
+            <div className="flex flex-col gap-4">
+              <h4 className="text-lg font-bold text-charcoal font-geist border-b border-borders/20 pb-1">Step 5. Match Cross Colours</h4>
               
-              <div className="flex flex-col gap-2 items-center w-full">
-                <BeginnerMethodImage num={18} label="Yellow cross unaligned → Yellow cross aligned with centers" />
+              <div className="flex flex-col gap-2 items-center w-full my-2">
+                <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Goal</span>
+                <BeginnerMethodImage num={18} label="Goal: Match Cross Colours" />
               </div>
 
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm">Turn the top face until 2 cross pieces match the side color (if all 4 match, you have finished this step!)</h5>
-              </div>
+              <div className="flex flex-col gap-3">
+                <BeginnerPoint>Our next step is to match the 4 yellow edge pieces with their respective center colour pieces.</BeginnerPoint>
+                <BeginnerPoint>Turn the top face of the cube, until 2 edge pieces match their side colors.</BeginnerPoint>
 
-              <div className="flex flex-col items-center w-full">
-                <BeginnerMethodImage num={19} label="Turn top layer to find matching side edges" />
-              </div>
-
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm">Hold the 2 matching edges at the back/right. If they are across from each other, hold them in any way.</h5>
-
-                <div className="flex flex-col items-center w-full">
-                  <BeginnerMethodImage num={20} label="Adjacent matching (Back/Right) and Opposite matching cases" />
+                <div className="flex flex-col items-center w-full my-2">
+                  <BeginnerMethodImage num={19} label="Align edge colors" />
                 </div>
 
-                <h5 className="font-bold text-sm">Then do the following moves:</h5>
+                <BeginnerNote>If all 4 edge pieces match their side colors, you are already done with Step 5.</BeginnerNote>
 
-                <div className="flex flex-col items-center w-full">
-                  <BeginnerMethodImage num={21} label="Sune algorithm sequence" />
+                <BeginnerPoint>You will come across any of these 2 scenarios:</BeginnerPoint>
+                <div className="pl-6 flex flex-col gap-1.5 -mt-1">
+                  <div className="text-xs text-muted-text font-semibold flex items-center gap-2">
+                    <span className="text-accent-orange font-bold">a.</span>
+                    <span>Either 2 edge pieces will match correctly adjacently.</span>
+                  </div>
+                  <div className="text-xs text-muted-text font-semibold flex items-center gap-2">
+                    <span className="text-accent-orange font-bold">b.</span>
+                    <span>Either 2 edge pieces will match correctly across each other.</span>
+                  </div>
                 </div>
 
-                <h5 className="font-bold text-sm">Turn the top to match all 4 colors. If you can only match 2 colors, then repeat this step.</h5>
+                <BeginnerPoint>Hold your cube (as shown below)depending on the scenario you are currently in:</BeginnerPoint>
+
+                <div className="flex flex-col items-center w-full my-2">
+                  <BeginnerMethodImage num={20} label="Scenarios holding directions" />
+                </div>
+
+                <BeginnerPoint>Then, do the Edge Correction Algorithm:</BeginnerPoint>
+                <BeginnerAlgo alg="R U R' U R U2 R' U" />
+
+                <div className="flex flex-col items-center w-full my-2">
+                  <BeginnerMethodImage num={21} label="Edge correction algorithm sequence" />
+                </div>
+
+                <BeginnerPoint>Check if all the yellow edge pieces are in the correct place now. If not, then again turn the top layer to match any of the 2 holding scenarios and repeat the Edge Correction Algorithm.</BeginnerPoint>
               </div>
             </div>
 
             <SectionDivider />
 
             {/* Step 6 */}
-            <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4">
               <h4 className="text-lg font-bold text-charcoal font-geist border-b border-borders/20 pb-1">Step 6. Match Corners</h4>
               
-              <div className="flex flex-col gap-2 items-center w-full">
-                <BeginnerMethodImage num={22} label="Edges matched, corners unaligned → Corners cycled into correct positions" />
+              <div className="flex flex-col gap-2 items-center w-full my-2">
+                <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Goal</span>
+                <BeginnerMethodImage num={22} label="Goal: Match Corners" />
               </div>
 
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm">A corner is in the correct position if all 3 colors on the piece match the surrounding colors.</h5>
-                <h5 className="font-bold text-sm">Examples of corner pieces in the correct position:</h5>
-              </div>
+              <div className="flex flex-col gap-3">
+                <BeginnerPoint>This step is only to make the yellow corner pieces in their correct position.</BeginnerPoint>
+                <BeginnerPoint>A corner is in the correct position if all 3 colors on the piece match the surrounding colors.</BeginnerPoint>
 
-              <div className="flex flex-col items-center w-full">
-                <BeginnerMethodImage num={23} label="Corner pieces in the correct position examples" />
-              </div>
-
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm">If 1 corner is correct, hold it in the front/right (if 0 are correct, hold any corner in the front/right).</h5>
-                <h5 className="font-bold text-sm">Then do the following moves:</h5>
-
-                <div className="flex flex-col items-center w-full">
-                  <BeginnerMethodImage num={24} label="Nicklas corner cycle algorithm sequence" />
+                <div className="flex flex-col gap-2 items-center w-full my-2">
+                  <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Example</span>
+                  <BeginnerMethodImage num={23} label="Example: Correct corner position" />
                 </div>
 
-                <h5 className="font-bold text-sm">Check if all 4 corners are in the correct position. If not, hold a correct corner on the front/right and repeat.</h5>
-                <p><span className="font-bold">Note:</span> If you only have 2 corners in the correct position, your cube is unsolvable, and needs to be taken apart and reassembled.</p>
+                <BeginnerPoint>If atleast 1 corner piece is in the correct position, then hold the cube making sure that, 1 correct corner piece is in the front-right position.</BeginnerPoint>
+                <BeginnerPoint>If none of the corner pieces are in the correct position, then hold the cube in any orientation.</BeginnerPoint>
+                
+                <BeginnerPoint>Now perform the Corner Permutation Algorithm:</BeginnerPoint>
+                <BeginnerAlgo alg="U R U' L' U R' U' L" />
+
+                <div className="flex flex-col items-center w-full my-2">
+                  <BeginnerMethodImage num={24} label="Corner permutation algorithm sequence" />
+                </div>
+
+                <BeginnerPoint>Check if all 4 corners are in the correct position. If not, hold a correct corner on the front/right and repeat.</BeginnerPoint>
+
+                <BeginnerNote>If you only have 2 corners in the correct position, your cube is unsolvable, and needs to be taken apart and reassembled.</BeginnerNote>
               </div>
             </div>
 
             <SectionDivider />
 
             {/* Step 7 */}
-            <div className="flex flex-col gap-5 border-b border-borders/20 pb-4">
+            <div className="flex flex-col gap-4 border-b border-borders/20 pb-4">
               <h4 className="text-lg font-bold text-charcoal font-geist border-b border-borders/20 pb-1">Step 7. Solve the Cube!</h4>
               
-              <div className="flex flex-col gap-2 items-center w-full">
-                <BeginnerMethodImage num={25} label="Unsolved corners on bottom → Solved Rubik's Cube" />
+              <div className="flex flex-col gap-2 items-center w-full my-2">
+                <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Goal</span>
+                <BeginnerMethodImage num={25} label="Goal: Solve the Cube" />
               </div>
 
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm text-accent-orange">It is very easy to make a mistake during this step, so I recommend reading the whole thing, including the common mistakes, before attempting it.</h5>
-                <h5 className="font-bold text-sm">Turn the cube over so that the unsolved corners are all in the bottom layer.</h5>
-                <p>You may have 2, 3, or 4 unsolved corner pieces.</p>
-              </div>
+              <div className="flex flex-col gap-3">
+                <p className="text-xs font-extrabold text-accent-orange leading-relaxed bg-accent-orange/5 border border-accent-orange/10 px-4 py-3 rounded-2xl max-w-3xl text-left my-1">
+                  💡 It is very easy to make a mistake during this step, so I recommend reading the whole thing, before attempting it.
+                </p>
 
-              <div className="flex flex-col items-center w-full">
-                <BeginnerMethodImage num={26} label="Bottom view unsolved corner cases" />
-              </div>
+                <BeginnerPoint>Turn the cube over so that the unsolved corners are all in the bottom layer.</BeginnerPoint>
 
-              <div className="text-xs text-charcoal/90 leading-relaxed flex flex-col gap-3">
-                <h5 className="font-bold text-sm">Repeatedly do the 4-move sequence until the front/right corner is solved (has yellow on the bottom).</h5>
-                <h5 className="font-bold text-sm">Then turn the bottom layer (not the whole cube) to bring an unsolved corner to the front/right. Repeat until the whole cube is solved.</h5>
+                <BeginnerNote>If you only have 1 corner unsolved while the rest of the cube is solved, or if you followed step 7 correctly but it does not work, then your cube is unsolvable, and needs to be taken apart and reassembled.</BeginnerNote>
 
-                <div className="flex flex-col items-center w-full">
-                  <BeginnerMethodImage num={27} label="Orient last layer corners Sexy moves sequence" />
+                <div className="flex flex-col gap-2 items-center w-full my-2">
+                  <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Example</span>
+                  <BeginnerMethodImage num={26} label="Example: Bottom view unsolved corners" />
                 </div>
 
-                <div className="px-4 py-3 bg-red-500/5 rounded-2xl border border-red-500/10 max-w-3xl">
-                  <span className="font-bold text-xs text-red-600">Common mistakes:</span>
-                  <ul className="list-disc list-inside mt-1 flex flex-col gap-1 text-[11px] text-muted-text">
-                    <li>Turning the whole cube to get the next corner to the bottom/right. <span className="font-bold text-charcoal">Make sure you turn only the bottom layer.</span></li>
-                    <li>Not finishing the 4-moves because the corner is solved after 3 moves. <span className="font-bold text-charcoal">Make sure you always finish the 4-moves.</span></li>
-                  </ul>
-                </div>
+                <BeginnerPoint>Repeatedly do the 4-move sequence until the front/right corner is solved (has yellow on the bottom).</BeginnerPoint>
+                <BeginnerPoint>Don’t worry if the rest of the cube gets messed up.</BeginnerPoint>
+                <BeginnerPoint>Then turn only the bottom layer (not the whole cube) to bring an unsolved corner to the bottom-right. Repeat until the whole cube is solved.</BeginnerPoint>
 
-                <p className="mt-2"><span className="font-bold">Note:</span> If you only have 1 corner unsolved while the rest of the cube is solved, or if you followed step 7 correctly but it does not work, then your cube is unsolvable, and needs to be taken apart and reassembled.</p>
+                <div className="flex flex-col gap-2 items-center w-full my-2">
+                  <span className="text-xs font-bold text-muted-text uppercase tracking-wider">Example</span>
+                  <BeginnerMethodImage num={27} label="Example: Solved state" />
+                </div>
               </div>
             </div>
 
+            {/* Celebration Banner */}
+            <div 
+              onMouseEnter={triggerConfetti}
+              className="my-6 p-6 rounded-2xl bg-white border-2 border-charcoal relative overflow-hidden flex flex-col items-center text-center shadow-[6px_6px_0px_0px_#1e1e1e] select-none"
+            >
+              {/* Trophy Icon with Brutalist style */}
+              <div className="w-12 h-12 rounded-xl bg-accent-orange border-2 border-charcoal flex items-center justify-center shadow-[2px_2px_0px_0px_#1e1e1e] mb-4 text-white">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-trophy"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34"/><path d="M12 2a6 6 0 0 0-6 6v1a8 8 0 0 0 12 0V8a6 6 0 0 0-6-6z"/></svg>
+              </div>
+
+              <h3 className="text-xl md:text-2xl font-black font-geist text-charcoal tracking-tight mb-2">
+                Congrats on solving the Rubik's Cube!
+              </h3>
+              <p className="text-xs text-muted-text max-w-md leading-relaxed font-semibold">
+                You have successfully mastered all 7 steps of the Beginner Method. Welcome to the world of cubing!
+              </p>
+            </div>
+
             {/* Next Steps */}
-            <div className="flex flex-col gap-3 mt-4">
-              <h4 className="text-lg font-bold text-charcoal font-geist">Next Steps</h4>
+            <div className="flex flex-col gap-3 mt-4 text-left">
+              <h4 className="text-lg font-bold text-charcoal font-geist border-b border-borders/20 pb-1">Next Steps</h4>
               <p className="text-xs text-muted-text leading-relaxed">
-                Congrats on solving the Rubik's Cube! With practice, you should be able to do this in a few minutes, or even under 1 minute if you practice a lot. Some people stop there, which is totally fine. But if you want to get even faster, you should learn how to do finger tricks and transition to the speedsolving CFOP Method.
+                With practice, you should be able to do this in a few minutes, or even under 1 minute if you practice a lot. Some people stop there, which is totally fine. But if you want to get even faster, you should learn how to do finger tricks and transition to the speedsolving CFOP Method.
               </p>
             </div>
           </motion.div>
