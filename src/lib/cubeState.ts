@@ -218,10 +218,15 @@ export function validateCubeState(state: CubeState): ValidationResult {
 
 // Applies a move to the CubeState and returns the next CubeState
 export function applyMoveToState(state: CubeState, move: string): CubeState {
-  const faceletStr = cubeStateToFaceletString(state);
-  const cube = Cube.fromString(faceletStr);
-  cube.move(move);
-  return faceletStringToCubeState(cube.asString());
+  try {
+    const faceletStr = cubeStateToFaceletString(state);
+    const cube = Cube.fromString(faceletStr);
+    cube.move(move);
+    return faceletStringToCubeState(cube.asString());
+  } catch (err) {
+    console.warn(`Non-standard cubejs move applied: ${move}`, err);
+    return state;
+  }
 }
 
 // Inverts a move sequence or a single move (e.g. R -> R', R' -> R, R2 -> R2)
